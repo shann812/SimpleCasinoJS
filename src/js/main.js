@@ -89,11 +89,15 @@ function playCoinflip(choosenSide){
     showElement("coinflipResults");
     if((randomNumber === 0 && choosenSide == "heads") || (randomNumber === 1 && choosenSide == "tails")){
         coinflipWinOrLoseEl.textContent = "You won!";
+        coinflipWinOrLoseEl.classList.remove("lose");
+        coinflipWinOrLoseEl.classList.add("win");
         coinflipWonValueEl.textContent = userBet;
         addMoneyToBalance(userBet);
     }
     else{
         coinflipWinOrLoseEl.textContent = "You lose";
+        coinflipWinOrLoseEl.classList.remove("win");
+        coinflipWinOrLoseEl.classList.add("lose");
         coinflipWonValueEl.textContent = '-' + userBet;
         deductMoneyFromBalance(userBet);
     }
@@ -104,25 +108,29 @@ function openGuessNumberGame(){
     hideElement("guessNumberResults");
 }
 
-function playGuessNumberGame(){
-    if(!validateUserBet(guessNumberBetInput)) return;
-    const userBet = parseFloat(guessNumberBetInput.value);
-    const userNumber = parseFloat(guessNumberUserNumberInput.value);
-    if(isNaN(userNumber) || userNumber > 10 || userNumber < 1){
-        alert("Please enter a number between 1 and 10");
-        return;
-    }
+    function playGuessNumberGame(){
+        if(!validateUserBet(guessNumberBetInput)) return;
+        const userBet = parseFloat(guessNumberBetInput.value);
+        const userNumber = parseFloat(guessNumberUserNumberInput.value);
+        if(isNaN(userNumber) || userNumber > 10 || userNumber < 1){
+            alert("Please enter a number between 1 and 10");
+            return;
+        }
 
-    const randomNumber = Math.floor(Math.random() * 10) + 1;
-    showElement("guessNumberResults");
-    if(randomNumber === userNumber){
-        guessNumberWinOrLoseEl.textContent = "You win!";
-        guessNumberWonValueEl.textContent = userBet * 10;
-        addMoneyToBalance(userBet * 10);
+        const randomNumber = Math.floor(Math.random() * 10) + 1;
+        showElement("guessNumberResults");
+        if(randomNumber === userNumber){
+            guessNumberWinOrLoseEl.textContent = "You win!";
+            guessNumberWinOrLoseEl.classList.remove("lose");
+            guessNumberWinOrLoseEl.classList.add("win");
+            guessNumberWonValueEl.textContent = userBet * 10;
+            addMoneyToBalance(userBet * 10);
+        }
+        else{
+            guessNumberWinOrLoseEl.textContent = "You lost. Correct number was " + randomNumber;
+            guessNumberWinOrLoseEl.classList.remove("win");
+            guessNumberWinOrLoseEl.classList.add("lose");
+            guessNumberWonValueEl.textContent = "-" + userBet;
+            deductMoneyFromBalance(userBet);
+        }
     }
-    else{
-        guessNumberWinOrLoseEl.textContent = "You lost. Correct number was " + randomNumber;
-        guessNumberWonValueEl.textContent = "-" + userBet;
-        deductMoneyFromBalance(userBet);
-    }
-}
