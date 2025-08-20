@@ -37,16 +37,16 @@ function deductMoneyFromBalance(value){
 
 function showElement(id){
     const el = document.getElementById(id);
-    el.style.visibility = "visible"
+    el.style.display = "block"
 }
 
 function hideElement(id){
     const el = document.getElementById(id);
-    el.style.visibility = "hidden"
+    el.style.display = "none"
 }
 
 function showAndHideDepositForm(){
-    depositSection.style.visibility = (depositSection.style.visibility == "visible") ? "hidden" : "visible"
+    depositSection.style.display = (depositSection.style.display == "block") ? "none" : "block"
 }
 
 function depositMoneyOnBalance(){
@@ -77,7 +77,7 @@ function validateUserBet(betInput){
 }
 
 function openCoinflipGame(){
-    coinflipSection.style.visibility = (coinflipSection.style.visibility == "visible") ? "hidden" : "visible";
+    coinflipSection.style.display = (coinflipSection.style.display == "block") ? "none" : "block";
     hideElement("coinflipResults");
 }
 
@@ -100,7 +100,7 @@ function playCoinflip(choosenSide){
 }
 
 function openGuessNumberGame(){
-    guessNumberSection.style.visibility = (coinflipSection.style.visibility == "visible") ? "hidden" : "visible";
+    guessNumberSection.style.display = (guessNumberSection.style.display == "block") ? "none" : "block";
     hideElement("guessNumberResults");
 }
 
