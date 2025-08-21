@@ -9,7 +9,7 @@
 <body>
     <h1>Casino</h1>
     <h3>Your balance: <span id="balance">100</span> $ </h3><br>
-    <button onclick="showAndHideDepositForm()">Deposit money</button>
+    <button id="openDepositFormBtn">Deposit money</button>
     <div id="depositSection" style="display: none;">
         <form id="depositForm">
             <p>How much money you wanna deposit:</p><br>
@@ -19,16 +19,17 @@
     </div>
 
     <h2>Games:</h2>
-    <button onclick="openCoinflipGame()">Coin Flip</button>
-    <button onclick="openGuessNumberGame()">Guess number</button>
+    <button id="openCoinflipBtn">Coin Flip</button>
+    <button id="openGuessNumberBtn">Guess number</button>
 
     <div id="coinflipGame" style="display: none;">
+        <h2>Coinflip</h2><br>
         <p>Enter your bet:</p> 
         <input type="text" id="coinflipBet"><br>
 
         <p>Choose heads or tails:</p><br>
-        <button onclick="playCoinflip('heads')">Heads</button><br>
-        <button onclick="playCoinflip('tails')">Tails</button><br>
+        <button id="playCoinflipHeadsBtn">Heads</button><br>
+        <button id="playCoinflipTailsBtn">Tails</button><br>
 
         <div id="coinflipResults" style="display: none;">
             <p id="coinflipWinOrLoseLable"></p>
@@ -37,13 +38,13 @@
     </div>
 
     <div id="guessNumberGame" style="display: none;">
-
+        <h2>Guess number</h2><br>
         <p>Enter your bet:</p>
         <input type="text" id="guessNumberBet">
 
         <p>Enter your number:</p>
         <input type="text" id="guessNumberUserNumber" placeholder="1-10">
-        <button onclick="playGuessNumberGame()">Guess</button>
+        <button id="playGuessNumberGameBtn">Guess</button>
 
         <div id="guessNumberResults" style="display: none;">
             <p id="guessNumberWinOrLoseLable"></p>
@@ -52,5 +53,5 @@
     </div>
 </body> 
 
-<script src="src/js/main.js"></script>
+<script type="module" src="./src/js/main.js"></script>
 </html>

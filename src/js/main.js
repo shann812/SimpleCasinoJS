@@ -1,136 +1,59 @@
-const balanceEl = getElement("balance");
-const depositSection = getElement("depositSection");
-const depositForm = getElement("depositForm");
-const depositMoneyInput = getElement("depositMoneySum");
+import { Coinflip } from "./games/coinflip.js";
+import { GuessNumber } from "./games/guessNumber.js";
+import { BalanceService } from "./balanceService.js";
+import { UIHelper } from "./UIHelper.js";
 
-const coinflipSection = getElement("coinflipGame");
-const coinflipBetInput = getElement("coinflipBet")
-const coinflipWinOrLoseEl = getElement("coinflipWinOrLoseLable");
-const coinflipWonValueEl = getElement("wonValueCoinflip");
 
-const guessNumberSection = getElement("guessNumberGame");
-const guessNumberBetInput = getElement("guessNumberBet");
-const guessNumberUserNumberInput = getElement("guessNumberUserNumber");
-const guessNumberWinOrLoseEl = getElement("guessNumberWinOrLoseLable");
-const guessNumberWonValueEl = getElement("wonValueGuessNumber");
+const openDepositFormBtn = UIHelper.getElement("openDepositFormBtn");
+const depositSection = UIHelper.getElement("depositSection");
+const depositForm = UIHelper.getElement("depositForm");
 
+const openCoinflipBtn = UIHelper.getElement("openCoinflipBtn");
+const coinflipSection = UIHelper.getElement("coinflipGame");
+const playCoinflipHeadsBtn = UIHelper.getElement("playCoinflipHeadsBtn");
+const playCoinflipTailsBtn = UIHelper.getElement("playCoinflipTailsBtn");
+
+const openGuessNumberBtn = UIHelper.getElement("openGuessNumberBtn");
+const guessNumberSection = UIHelper.getElement("guessNumberGame");
+const playGuessNumberGameBtn = UIHelper.getElement("playGuessNumberGameBtn");
+
+openDepositFormBtn.addEventListener("click", function(event) {
+    depositSection.style.display = (depositSection.style.display == "block") ? "none" : "block"
+})
 
 depositForm.addEventListener("submit", function(event) {
     event.preventDefault();
-    depositMoneyOnBalance();
+    const balanceService = new BalanceService();
+    balanceService.depositMoneyOnBalance();
 });
 
-function getElement(id){
-    return document.getElementById(id);
+openCoinflipBtn.addEventListener("click", function(event) {
+    showOnlyGame(coinflipSection);
+    UIHelper.hideElement("coinflipResults");
+});
+
+openGuessNumberBtn.addEventListener("click", function(event) {
+    showOnlyGame(guessNumberSection);
+    UIHelper.hideElement("guessNumberResults");
+})
+
+const coinflipGame = new Coinflip();
+playCoinflipHeadsBtn.addEventListener("click", function(event) {
+    coinflipGame.playCoinflip("heads");
+})
+
+playCoinflipTailsBtn.addEventListener("click", function(event) {
+    coinflipGame.playCoinflip("tails");
+})
+
+const guessNumberGame = new GuessNumber();
+playGuessNumberGameBtn.addEventListener("click", function(event) {
+    guessNumberGame.playGuessNumberGame();
+})
+
+function showOnlyGame(gameSectionToShow){
+    const games = [coinflipSection, guessNumberSection];
+     games.forEach(game => {
+        game.style.display = ((game === gameSectionToShow) && gameSectionToShow.style.display == "none") ? "block" : "none";
+    });
 }
-function getUserBalance(){
-    return parseFloat(balanceEl.textContent);
-}
-
-function addMoneyToBalance(value){
-    balanceEl.textContent = getUserBalance() + value;
-}
-
-function deductMoneyFromBalance(value){
-    balanceEl.textContent = getUserBalance() - value;
-}
-
-function showElement(id){
-    const el = document.getElementById(id);
-    el.style.display = "block"
-}
-
-function hideElement(id){
-    const el = document.getElementById(id);
-    el.style.display = "none"
-}
-
-function showAndHideDepositForm(){
-    depositSection.style.display = (depositSection.style.display == "block") ? "none" : "block"
-}
-
-function depositMoneyOnBalance(){
-    const depositValue = parseFloat(depositMoneyInput.value);
-
-    if(depositValue <= 0 || isNaN(depositValue)){
-        alert("Enter correct deposit sum");
-        return;
-    }
-
-    addMoneyToBalance(depositValue);
-    depositMoneyInput.value = "";
-    showAndHideDepositForm();
-}
-
-function validateUserBet(betInput){
-    const userBet = parseFloat(betInput.value);
-    if(isNaN(userBet) || userBet <= 0){
-        alert("Enter correct bet value");
-        return false;
-    }
-    if(userBet > getUserBalance()){
-        alert("Your bet exceeds your balance.");
-        return false;
-    }
-
-    return true;
-}
-
-function openCoinflipGame(){
-    coinflipSection.style.display = (coinflipSection.style.display == "block") ? "none" : "block";
-    hideElement("coinflipResults");
-}
-
-function playCoinflip(choosenSide){
-    if(!validateUserBet(coinflipBetInput)) return;
-    const userBet = parseFloat(coinflipBetInput.value);
-
-    const randomNumber = Math.round(Math.random());
-    showElement("coinflipResults");
-    if((randomNumber === 0 && choosenSide == "heads") || (randomNumber === 1 && choosenSide == "tails")){
-        coinflipWinOrLoseEl.textContent = "You won!";
-        coinflipWinOrLoseEl.classList.remove("lose");
-        coinflipWinOrLoseEl.classList.add("win");
-        coinflipWonValueEl.textContent = userBet;
-        addMoneyToBalance(userBet);
-    }
-    else{
-        coinflipWinOrLoseEl.textContent = "You lose";
-        coinflipWinOrLoseEl.classList.remove("win");
-        coinflipWinOrLoseEl.classList.add("lose");
-        coinflipWonValueEl.textContent = '-' + userBet;
-        deductMoneyFromBalance(userBet);
-    }
-}
-
-function openGuessNumberGame(){
-    guessNumberSection.style.display = (guessNumberSection.style.display == "block") ? "none" : "block";
-    hideElement("guessNumberResults");
-}
-
-    function playGuessNumberGame(){
-        if(!validateUserBet(guessNumberBetInput)) return;
-        const userBet = parseFloat(guessNumberBetInput.value);
-        const userNumber = parseFloat(guessNumberUserNumberInput.value);
-        if(isNaN(userNumber) || userNumber > 10 || userNumber < 1){
-            alert("Please enter a number between 1 and 10");
-            return;
-        }
-
-        const randomNumber = Math.floor(Math.random() * 10) + 1;
-        showElement("guessNumberResults");
-        if(randomNumber === userNumber){
-            guessNumberWinOrLoseEl.textContent = "You win!";
-            guessNumberWinOrLoseEl.classList.remove("lose");
-            guessNumberWinOrLoseEl.classList.add("win");
-            guessNumberWonValueEl.textContent = userBet * 10;
-            addMoneyToBalance(userBet * 10);
-        }
-        else{
-            guessNumberWinOrLoseEl.textContent = "You lost. Correct number was " + randomNumber;
-            guessNumberWinOrLoseEl.classList.remove("win");
-            guessNumberWinOrLoseEl.classList.add("lose");
-            guessNumberWonValueEl.textContent = "-" + userBet;
-            deductMoneyFromBalance(userBet);
-        }
-    }
