@@ -10,6 +10,7 @@ export class Validator{
         
         const userBalance = this.getUserBalance();
         if(userBet > this.getUserBalance()){
+            //TODO: change this to new notification system (sounds cool)
             alert("Your bet exceeds your balance.");
             return false;
         }

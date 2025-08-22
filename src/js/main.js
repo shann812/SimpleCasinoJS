@@ -27,6 +27,11 @@ depositForm.addEventListener("submit", function(event) {
     balanceService.depositMoneyOnBalance();
 });
 
+window.addEventListener("balanceDepositedSuccess", (e) => {
+    const amount = e.detail.amount;
+    showToast("Your balance succesfully replenished by " + amount);
+});
+
 openCoinflipBtn.addEventListener("click", function(event) {
     showOnlyGame(coinflipSection);
     UIHelper.hideElement("coinflipResults");
@@ -51,9 +56,23 @@ playGuessNumberGameBtn.addEventListener("click", function(event) {
     guessNumberGame.playGuessNumberGame();
 })
 
+
 function showOnlyGame(gameSectionToShow){
     const games = [coinflipSection, guessNumberSection];
      games.forEach(game => {
         game.style.display = ((game === gameSectionToShow) && gameSectionToShow.style.display == "none") ? "block" : "none";
     });
+}
+
+function showToast(message){
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = message;
+
+    const container = UIHelper.getElement("toast-container");
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 2000);
 }
