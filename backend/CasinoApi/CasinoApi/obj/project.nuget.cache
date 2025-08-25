@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "kw2scNVsaoU=",
+  "success": true,
+  "projectFilePath": "D:\\Programist\\c#\\pet-\\Casino\\backend\\CasinoApi\\CasinoApi\\CasinoApi.csproj",
+  "expectedPackageFiles": [
+    "A:\\TRASH FROM C DISK\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "A:\\TRASH FROM C DISK\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
+    "A:\\TRASH FROM C DISK\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
+    "A:\\TRASH FROM C DISK\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
+    "A:\\TRASH FROM C DISK\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
+    "A:\\TRASH FROM C DISK\\swashbuckle.aspnetcore.swaggerui\\6.6.2\\swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512"
+  ],
+  "logs": []
+}
