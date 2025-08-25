@@ -12,4 +12,14 @@ export class UIHelper{
         const el = document.getElementById(id);
         el.style.display = "none"
     }
+
+    static showMessage(message, type){
+        const event = new CustomEvent("showToastMessage", {
+            detail: {
+                message: message,
+                type: type
+            }
+        });
+        window.dispatchEvent(event);
+    }
 }

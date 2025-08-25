@@ -1,17 +1,17 @@
 import { BalanceService } from "./balanceService.js";
+import { UIHelper } from "./UIHelper.js";
 
 export class Validator{
     static validateUserBet(betInput){
         const userBet = parseFloat(betInput.value);
         if(isNaN(userBet) || userBet <= 0){
-            alert("Enter correct bet value");
+            UIHelper.showMessage("Enter correct bet value", "error");
             return false;
         }
         
         const userBalance = this.getUserBalance();
         if(userBet > this.getUserBalance()){
-            //TODO: change this to new notification system (sounds cool)
-            alert("Your bet exceeds your balance.");
+            UIHelper.showMessage("Your bet exceeds your balance.", "error");
             return false;
         }
 

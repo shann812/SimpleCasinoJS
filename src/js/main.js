@@ -27,9 +27,8 @@ depositForm.addEventListener("submit", function(event) {
     balanceService.depositMoneyOnBalance();
 });
 
-window.addEventListener("balanceDepositedSuccess", (e) => {
-    const amount = e.detail.amount;
-    showToast("Your balance succesfully replenished by " + amount);
+window.addEventListener("showToastMessage", (e) => {
+    showToast(e.detail.message, e.detail.type);
 });
 
 openCoinflipBtn.addEventListener("click", function(event) {
@@ -64,9 +63,9 @@ function showOnlyGame(gameSectionToShow){
     });
 }
 
-function showToast(message){
+function showToast(message, type = "info"){
     const toast = document.createElement("div");
-    toast.className = "toast";
+    toast.className = `toast toast-${type}`;
     toast.textContent = message;
 
     const container = UIHelper.getElement("toast-container");

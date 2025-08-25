@@ -19,7 +19,7 @@ export class GuessNumber{
         const userBet = parseFloat(this.guessNumberBetInput.value);
         const userNumber = parseFloat(this.guessNumberUserNumberInput.value);
         if(isNaN(userNumber) || userNumber > 10 || userNumber < 1){
-            alert("Please enter a number between 1 and 10");
+            UIHelper.showMessage("Please enter a number between 1 and 10", "error"); //TODO: Add success/error messanges
             return;
         }
 

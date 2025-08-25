@@ -32,14 +32,16 @@ export class BalanceService{
         const depositValue = parseFloat(this.depositMoneyInput.value);
 
         if(depositValue <= 0 || isNaN(depositValue)){
-            alert("Enter correct deposit sum");
+            const message = "Enter correct deposit sum";
+            UIHelper.showMessage(message, "error");
             return;
         }
 
         this.addMoneyToBalance(depositValue);
         this.depositMoneyInput.value = "";
-        this.#sentSuccessMessage(depositValue);
-        //TODO: add a deposit sucssess message in events in main.js
+
+        const message = "Your balance succesfully replenished by " + depositValue;
+        UIHelper.showMessage(message, "success");
     }
 
     #updateUI(){
@@ -49,14 +51,5 @@ export class BalanceService{
     #isSessionExist(){
         const userBalance = sessionStorage.getItem("userBalance");
         return userBalance !== null;
-    }
-
-    #sentSuccessMessage(depositValue){
-        const event = new CustomEvent("balanceDepositedSuccess", {
-            detail: {
-                amount: depositValue
-            }   
-        });
-        window.dispatchEvent(event);
     }
 }
