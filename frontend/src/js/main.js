@@ -32,12 +32,12 @@ window.addEventListener("showToastMessage", (e) => {
 });
 
 openCoinflipBtn.addEventListener("click", function(event) {
-    showOnlyGame(coinflipSection);
+    toggleGameSectionAndHideOthers(coinflipSection);
     UIHelper.hideElement("coinflipResults");
 });
 
 openGuessNumberBtn.addEventListener("click", function(event) {
-    showOnlyGame(guessNumberSection);
+    toggleGameSectionAndHideOthers(guessNumberSection);
     UIHelper.hideElement("guessNumberResults");
 })
 
@@ -56,7 +56,7 @@ playGuessNumberGameBtn.addEventListener("click", function(event) {
 })
 
 
-function showOnlyGame(gameSectionToShow){
+function toggleGameSectionAndHideOthers(gameSectionToShow){
     const games = [coinflipSection, guessNumberSection];
      games.forEach(game => {
         game.style.display = ((game === gameSectionToShow) && gameSectionToShow.style.display == "none") ? "block" : "none";
