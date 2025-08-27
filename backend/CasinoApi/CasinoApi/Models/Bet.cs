@@ -1,4 +1,6 @@
-﻿namespace CasinoApi.Models
+﻿using CasinoApi.Enums;
+
+namespace CasinoApi.Models
 {
     public class Bet
     {
