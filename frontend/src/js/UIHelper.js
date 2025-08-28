@@ -13,12 +13,9 @@ export class UIHelper{
         el.style.display = "none"
     }
 
-    static showMessage(message, type){
+    static showMessage(message, type = "info") {
         const event = new CustomEvent("showToastMessage", {
-            detail: {
-                message: message,
-                type: type
-            }
+            detail: { message, type }
         });
         window.dispatchEvent(event);
     }

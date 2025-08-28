@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/assets/style.css">
+    <title>Registration</title>
+</head>
+<body>
+    <h1>Registration</h1>
+    <div>
+        <form id="registrationForm">
+            <p>Enter your email:</p>
+            <input type="email" id="email" placeholder="YourEmail@email.com" required><br>
+            <p>Enter your user name:</p>
+            <input type="text" id="userName" placeholder="UserName" minlength="6" maxlength="20" required>
+            <p>Password:</p>
+            <input type="password" id="password" placeholder="6-20 characters" minlength="6" maxlength="20" required>
+            <p>Repeat password</p>
+            <input type="password" id="passwordRepeat" placeholder="6-20 characters" minlength="6" maxlength="20" required>
+            <button type="submit">Create account</button>
+        </form>
+    </div>
+
+    <div id="toastContainer"></div>
+</body>
+
+<script type="module" src="./src/js/registration.js"></script>
+</html>

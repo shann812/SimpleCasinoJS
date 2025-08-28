@@ -2,7 +2,8 @@ import { Coinflip } from "./games/coinflip.js";
 import { GuessNumber } from "./games/guessNumber.js";
 import { BalanceService } from "./balanceService.js";
 import { UIHelper } from "./UIHelper.js";
-
+import { ToastManager } from "./toastManager.js";
+ToastManager.init();
 
 const openDepositFormBtn = UIHelper.getElement("openDepositFormBtn");
 const depositSection = UIHelper.getElement("depositSection");
@@ -28,7 +29,8 @@ depositForm.addEventListener("submit", function(event) {
 });
 
 window.addEventListener("showToastMessage", (e) => {
-    showToast(e.detail.message, e.detail.type);
+    const { message, type } = e.detail;
+    showToast(message, type);
 });
 
 openCoinflipBtn.addEventListener("click", function(event) {
@@ -61,17 +63,4 @@ function toggleGameSectionAndHideOthers(gameSectionToShow){
      games.forEach(game => {
         game.style.display = ((game === gameSectionToShow) && gameSectionToShow.style.display == "none") ? "block" : "none";
     });
-}
-
-function showToast(message, type = "info"){
-    const toast = document.createElement("div");
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-
-    const container = UIHelper.getElement("toast-container");
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 2000);
 }
