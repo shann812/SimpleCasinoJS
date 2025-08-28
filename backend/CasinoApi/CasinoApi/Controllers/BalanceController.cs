@@ -7,18 +7,20 @@ namespace CasinoApi.Controllers
     public class BalanceController : Controller
     {
         private readonly BalanceService _balanceService;
+        private readonly UserContextService _userContextService;
 
-        public BalanceController(BalanceService balanceService)
+        public BalanceController(BalanceService balanceService, UserContextService userContextService)
         {
             _balanceService = balanceService;
+            _userContextService = userContextService;
         }
 
         [Route("api/[controller]")]
         [HttpGet]
         public async Task<IActionResult> GetBalanceAsync()
         {
-            var userId = GetIdFromToken();
-            var balance = await _balanceService.GetBalance(userId);
+            var userId = _userContextService.GetCurrentUserId();
+            var balance = await _balanceService.GetBalanceAsync(userId);
             return Ok(balance);
         }
     }

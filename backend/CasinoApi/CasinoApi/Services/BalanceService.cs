@@ -2,10 +2,10 @@
 {
     public class BalanceService
     {
-        public int GetBalance(int userId)
+        public Task<int> GetBalanceAsync(Guid userId)
         {
-            // Logic to get the balance from the database
-            return 1000; // Placeholder value
+            throw new NotImplementedException();
+            //TODO
         }
     }
 }

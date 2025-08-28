@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CasinoApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250827181034_InitailCreate")]
-    partial class InitailCreate
+    [Migration("20250828121733_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace CasinoApi.Migrations
 
             modelBuilder.Entity("CasinoApi.Models.Bet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("BalanceAfter")
                         .HasColumnType("numeric");
@@ -48,8 +46,8 @@ namespace CasinoApi.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("WinningsMoney")
                         .HasColumnType("numeric");
@@ -63,11 +61,10 @@ namespace CasinoApi.Migrations
 
             modelBuilder.Entity("CasinoApi.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("numeric");

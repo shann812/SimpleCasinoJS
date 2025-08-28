@@ -1,4 +1,5 @@
 using CasinoApi.Data;
+using CasinoApi.Interfaces;
 using CasinoApi.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddScoped<BalanceService>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 var app = builder.Build();
 

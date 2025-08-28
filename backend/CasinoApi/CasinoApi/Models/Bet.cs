@@ -4,7 +4,7 @@ namespace CasinoApi.Models
 {
     public class Bet
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public bool IsWin { get; set; }
         public decimal Price { get; set; }
         public decimal WinningsMoney { get; set; }
@@ -12,7 +12,7 @@ namespace CasinoApi.Models
         public decimal BalanceAfter { get; set; }
         public DateTime Date { get; set; }
 
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
     }
 }
