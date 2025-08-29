@@ -1,7 +1,4 @@
-﻿using CasinoApi.Enums;
-using Microsoft.AspNetCore.Identity;
-
-namespace CasinoApi.Models
+﻿namespace CasinoApi.Models
 {
     public class User
     {
@@ -10,10 +7,9 @@ namespace CasinoApi.Models
         public string PasswordHash { get; set; }
         public string Username { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public bool Verificated { get; set; } = false;
-        public RoleTypes Role { get; set; } = RoleTypes.User;
+        public bool Verification { get; set; } = false;
 
-        public decimal Balance { get; set; } = 0;
+        public decimal Balance { get; set; }
         public List<Bet> Bets { get; set; } = new();
     }
 }

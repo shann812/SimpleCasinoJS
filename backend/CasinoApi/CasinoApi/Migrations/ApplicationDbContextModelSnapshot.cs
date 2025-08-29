@@ -77,14 +77,11 @@ namespace CasinoApi.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("Verificated")
+                    b.Property<bool>("Verification")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");

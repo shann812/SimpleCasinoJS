@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "YLcv6Gk2Kug=",
+  "dgSpecHash": "95VTCfwHCrI=",
   "success": true,
   "projectFilePath": "D:\\Programist\\c#\\pet-\\Casino\\backend\\CasinoApi\\CasinoApi\\CasinoApi.csproj",
   "expectedPackageFiles": [
-    "A:\\TRASH FROM C DISK\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "A:\\TRASH FROM C DISK\\entityframework\\6.5.1\\entityframework.6.5.1.nupkg.sha512",
     "A:\\TRASH FROM C DISK\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "A:\\TRASH FROM C DISK\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",

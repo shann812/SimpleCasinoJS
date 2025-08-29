@@ -20,10 +20,10 @@ export class Validator{
 
     static validateUserRegistration(user){
         if(user.userName.lenght < 4 || user.userName.lenght > 20){
-            UIHelper.showMessage("User name must br 4-20 characters");
+            UIHelper.showMessage("User name must be 4-20 characters");
             return;
         }
-            
+            //password
         if(!user.email.includes("@")){
             UIHelper.showMessage("Please enter correct email");
             return;

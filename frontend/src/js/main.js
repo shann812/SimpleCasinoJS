@@ -28,10 +28,6 @@ depositForm.addEventListener("submit", function(event) {
     balanceService.depositMoneyOnBalance();
 });
 
-window.addEventListener("showToastMessage", (e) => {
-    const { message, type } = e.detail;
-    showToast(message, type);
-});
 
 openCoinflipBtn.addEventListener("click", function(event) {
     toggleGameSectionAndHideOthers(coinflipSection);

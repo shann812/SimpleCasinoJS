@@ -46,10 +46,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "BCrypt.Net-Next": {
-              "target": "Package",
-              "version": "[4.0.3, )"
-            },
             "EntityFramework": {
               "target": "Package",
               "version": "[6.5.1, )"
