@@ -43,8 +43,10 @@ export class Validator{
             UIHelper.showMessage("Please enter correct email");
             return;
         }
+        
+        return true;
     }
-    
+
     //TODO: this is trashcode
     static getUserBalance(){
         const _balanceService = new BalanceService();

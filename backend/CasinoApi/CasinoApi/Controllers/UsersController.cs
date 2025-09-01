@@ -34,13 +34,12 @@ namespace CasinoApi.Controllers
         {
             if(dto == null)
             {
-                throw new NullReferenceException();
-                //TODO: log, return
+                return BadRequest(new { errors = new[] { "Invalid email or password" } });
             }
 
             var user = await _userService.GetUserByEmailAsync(dto.Email);
             if(user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                return Unauthorized(new { error = "Invalid email or password" });
+                return Unauthorized(new { errors = new[] { "Invalid email or password" } });
 
             var token = _jwtService.GenerateToken(user);
             return Ok(new { token, user.Username, user.Role });

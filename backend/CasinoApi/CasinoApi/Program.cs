@@ -29,6 +29,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<BalanceService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 var app = builder.Build();

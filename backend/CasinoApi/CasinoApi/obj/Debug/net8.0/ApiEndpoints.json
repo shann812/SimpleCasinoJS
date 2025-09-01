@@ -11,6 +11,22 @@
   },
   {
     "ContainingType": "CasinoApi.Controllers.UsersController",
+    "Method": "LoginAsync",
+    "RelativePath": "api/users/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "CasinoApi.Dto.LoginUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CasinoApi.Controllers.UsersController",
     "Method": "RegisterAsync",
     "RelativePath": "api/users/register",
     "HttpMethod": "POST",

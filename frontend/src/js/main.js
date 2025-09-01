@@ -2,6 +2,7 @@ import { Coinflip } from "./games/coinflip.js";
 import { GuessNumber } from "./games/guessNumber.js";
 import { BalanceService } from "./balanceService.js";
 import { UIHelper } from "./UIHelper.js";
+import { Validator } from "./validator.js";
 import { ToastManager } from "./toastManager.js";
 ToastManager.init();
 
@@ -89,6 +90,36 @@ function toggleGameSectionAndHideOthers(gameSectionToShow){
     });
 }
 
-function loginUser(userLogin){
-    //TODO: connection with api
+async function loginUser(userLogin){
+    try{
+        const response = await fetch("https://localhost:7181/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userLogin)
+        });
+        if(!response.ok){
+            const jsonErrors = await response.json();
+
+            if (Array.isArray(jsonErrors.errors)) {
+                jsonErrors.errors.forEach(err => UIHelper.showMessage(err, "error"));
+            } else {
+                UIHelper.showMessage("Unknown error occurred (frontend)", "error");
+            }
+        }
+        else{
+            const data = await response.json();
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("username", data.userName);
+            localStorage.setItem("role", data.role);
+
+            //TODO: fix toasts
+            UIHelper.showMessage("Logged in successfully", "success");
+            window.location.href = "index.html";
+        }
+    }
+    catch(err){
+        UIHelper.showMessage("Network error", "error");
+        console.error(err);
+    }
 }
