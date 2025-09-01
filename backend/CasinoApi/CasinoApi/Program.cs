@@ -1,5 +1,6 @@
 using CasinoApi.Data;
 using CasinoApi.Interfaces;
+using CasinoApi.Options;
 using CasinoApi.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,9 +15,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddScoped<BalanceService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 var app = builder.Build();
@@ -31,6 +43,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("AllowAll");
 
 app.MapControllers();
 
