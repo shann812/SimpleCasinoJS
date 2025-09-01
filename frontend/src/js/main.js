@@ -5,6 +5,12 @@ import { UIHelper } from "./UIHelper.js";
 import { ToastManager } from "./toastManager.js";
 ToastManager.init();
 
+//TODO: fix style, add header
+const loginBtn = UIHelper.getElement("loginBtn");
+const registrationBtn = UIHelper.getElement("registrationBtn");
+const loginFormSection = UIHelper.getElement("loginFormSection");
+const loginForm = UIHelper.getElement("loginForm");
+
 const openDepositFormBtn = UIHelper.getElement("openDepositFormBtn");
 const depositSection = UIHelper.getElement("depositSection");
 const depositForm = UIHelper.getElement("depositForm");
@@ -17,6 +23,28 @@ const playCoinflipTailsBtn = UIHelper.getElement("playCoinflipTailsBtn");
 const openGuessNumberBtn = UIHelper.getElement("openGuessNumberBtn");
 const guessNumberSection = UIHelper.getElement("guessNumberGame");
 const playGuessNumberGameBtn = UIHelper.getElement("playGuessNumberGameBtn");
+
+
+loginBtn.addEventListener("click", function(event) {
+    loginFormSection.style.display = (loginFormSection.style.display == "block") ? "none" : "block"
+})
+
+loginForm.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    var userLogin = {
+        email: UIHelper.getElement("email").value,
+        password: UIHelper.getElement("password").value,
+    }
+    
+    if(Validator.validateUserLogin(userLogin)){
+        await loginUser(userLogin);
+    };
+})
+
+registrationBtn.addEventListener("click", function(event) {
+    window.location.href = "registration.html";
+})
 
 openDepositFormBtn.addEventListener("click", function(event) {
     depositSection.style.display = (depositSection.style.display == "block") ? "none" : "block"
@@ -59,4 +87,8 @@ function toggleGameSectionAndHideOthers(gameSectionToShow){
      games.forEach(game => {
         game.style.display = ((game === gameSectionToShow) && gameSectionToShow.style.display == "none") ? "block" : "none";
     });
+}
+
+function loginUser(userLogin){
+    //TODO: connection with api
 }

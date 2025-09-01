@@ -37,6 +37,14 @@ export class Validator{
         return true;
     }
 
+    static validateUserLogin(loginUser){
+        //TODO: validate email separate in another method
+        if(!loginUser.email.includes("@")){
+            UIHelper.showMessage("Please enter correct email");
+            return;
+        }
+    }
+    
     //TODO: this is trashcode
     static getUserBalance(){
         const _balanceService = new BalanceService();

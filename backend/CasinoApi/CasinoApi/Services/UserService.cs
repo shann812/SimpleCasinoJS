@@ -1,6 +1,7 @@
 ﻿using CasinoApi.Data;
 using CasinoApi.Dto;
 using CasinoApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CasinoApi.Services
 {
@@ -82,5 +83,8 @@ namespace CasinoApi.Services
 
             return result;
         }
+
+        public async Task<User?> GetUserByEmailAsync(string email) 
+            => await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 }
