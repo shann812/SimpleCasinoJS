@@ -6,10 +6,16 @@
     <link rel="stylesheet" href="src/assets/style.css">
     <title>Casino</title>
 </head>
+
 <header>
-    <button id="loginBtn">Log in</button>
-    <button id="registrationBtn">Registration</button>
+    <div id="userGreeting" style="display: none;">👋 Welcome, <span id="usernameDisplay"></span></div>
+    <button id="logoutBtn" style="display: none;">Log out</button>
+    <div id="authButtons">
+        <button id="loginBtn">Log in</button>
+        <button id="registrationBtn">Registration</button>
+    </div>  
 </header>
+
 <body>
     <h1>Casino</h1>
     <h3>Your balance: <span id="balance">100</span> $ </h3><br>

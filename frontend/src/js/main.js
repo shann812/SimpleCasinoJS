@@ -26,6 +26,35 @@ const guessNumberSection = UIHelper.getElement("guessNumberGame");
 const playGuessNumberGameBtn = UIHelper.getElement("playGuessNumberGameBtn");
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+
+    const greetingDiv = document.getElementById("userGreeting");
+    const usernameSpan = document.getElementById("usernameDisplay");
+    const authButtons = document.getElementById("authButtons");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (token && username) {
+        usernameSpan.textContent = username;
+        greetingDiv.style.display = "block";
+        authButtons.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+    } else {
+        greetingDiv.style.display = "none";
+        authButtons.style.display = "flex";
+        logoutBtn.style.display = "none";
+    }
+
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("role");
+        location.reload();
+    });
+});
+
+
 loginBtn.addEventListener("click", function(event) {
     loginFormSection.style.display = (loginFormSection.style.display == "block") ? "none" : "block"
 })
@@ -56,7 +85,6 @@ depositForm.addEventListener("submit", function(event) {
     const balanceService = new BalanceService();
     balanceService.depositMoneyOnBalance();
 });
-
 
 openCoinflipBtn.addEventListener("click", function(event) {
     toggleGameSectionAndHideOthers(coinflipSection);
@@ -110,7 +138,7 @@ async function loginUser(userLogin){
             const data = await response.json();
 
             localStorage.setItem("token", data.token);
-            localStorage.setItem("username", data.userName);
+            localStorage.setItem("username", data.username);
             localStorage.setItem("role", data.role);
 
             //TODO: fix toasts
