@@ -1,4 +1,5 @@
 ﻿using CasinoApi.Dto;
+using CasinoApi.Models;
 using CasinoApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,29 +20,29 @@ namespace CasinoApi.Controllers
         {
             var validationResult = _userService.ValidateRegistrationDto(dto);
             if (!validationResult.Success)
-                return BadRequest(new { errors = validationResult.Errors });
+                return BadRequest(validationResult);
 
             var user = _userService.CreateUserFromRegistrationDto(dto);
             var saveUserResult = await _userService.SaveUserAsync(user);
             if (!saveUserResult.Success)
-                return BadRequest(new { errors = saveUserResult.Errors });
+                return BadRequest(saveUserResult);
 
-            return Ok(new { message = "User registered successfully" });
+            return Ok(OperationResult<string>.Ok("Accout created successfully"));
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(LoginUserDto dto, [FromServices] JwtService _jwtService)
         {
             if(dto == null)
-            {
-                return BadRequest(new { errors = new[] { "Invalid email or password" } });
-            }
+                return BadRequest(OperationResult.Fail("Error with dto"));
 
             var user = await _userService.GetUserByEmailAsync(dto.Email);
             if(user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                return Unauthorized(new { errors = new[] { "Invalid email or password" } });
+                return Unauthorized(OperationResult.Fail("Invalid email or password"));
 
             var token = _jwtService.GenerateToken(user);
+
+            //TODO: return operationResultDto
             return Ok(new { token, user.Username, user.Role });
         }
     }

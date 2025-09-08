@@ -76,8 +76,7 @@ namespace CasinoApi.Services
             }
             catch (Exception ex)
             {
-                result.Success = false;
-                result.Errors.Add("An error occurred while saving the user.");
+                result = OperationResult.Fail("An error occurred while saving the user.");
                 // Log the exception (ex) if needed
             }
 
@@ -86,5 +85,8 @@ namespace CasinoApi.Services
 
         public async Task<User?> GetUserByEmailAsync(string email) 
             => await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        public async Task<User?> GetUserById(Guid userId) 
+            => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
     }
 }
