@@ -3,6 +3,8 @@ using CasinoApi.Interfaces;
 using CasinoApi.Options;
 using CasinoApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,20 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:SecretKey"]))
+        };
+    });
+
 builder.Services.AddScoped<BalanceService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<JwtService>();
@@ -41,11 +57,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseAuthentication();
 
-app.UseCors("AllowAll");
+app.UseAuthorization();
 
 app.MapControllers();
 

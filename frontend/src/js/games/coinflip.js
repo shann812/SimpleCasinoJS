@@ -14,8 +14,9 @@ export class Coinflip{
         this.#balanceService = new BalanceService();
     }
 
-    playCoinflip(choosenSide){
-        if(!Validator.validateUserBet(this.coinflipBetInput)) 
+    async playCoinflip(choosenSide){
+        const isBetValid = await Validator.validateUserBet(this.coinflipBetInput);
+        if (!isBetValid)
             return;
         const userBet = parseFloat(this.coinflipBetInput.value);
 
@@ -26,14 +27,14 @@ export class Coinflip{
             this.coinflipWinOrLoseEl.classList.remove("lose");
             this.coinflipWinOrLoseEl.classList.add("win");
             this.coinflipWonValueEl.textContent = userBet;
-            this.#balanceService.addMoneyToBalance(userBet);
+            await this.#balanceService.changeBalance(userBet);
         }
         else{
             this.coinflipWinOrLoseEl.textContent = "You lose";
             this.coinflipWinOrLoseEl.classList.remove("win");
             this.coinflipWinOrLoseEl.classList.add("lose");
             this.coinflipWonValueEl.textContent = '-' + userBet;
-            this.#balanceService.deductMoneyFromBalance(userBet);
+            await this.#balanceService.changeBalance(-userBet);
         }
     }
 }

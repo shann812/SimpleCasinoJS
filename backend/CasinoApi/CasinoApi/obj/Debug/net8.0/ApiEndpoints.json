@@ -2,11 +2,27 @@
   {
     "ContainingType": "CasinoApi.Controllers.BalanceController",
     "Method": "GetBalanceAsync",
-    "RelativePath": "api/GetBalance",
+    "RelativePath": "api/balance",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CasinoApi.Controllers.BalanceController",
+    "Method": "ChangeUserBalance",
+    "RelativePath": "api/balance/change",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "changeBalanceDto",
+        "Type": "CasinoApi.Dto.ChangeBalanceDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

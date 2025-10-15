@@ -1,4 +1,5 @@
-﻿using CasinoApi.Models;
+﻿using CasinoApi.Dto;
+using CasinoApi.Interfaces;
 using CasinoApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,19 +10,19 @@ namespace CasinoApi.Controllers
     public class BalanceController : Controller
     {
         private readonly BalanceService _balanceService;
-        private readonly UserContextService _userContextService;
+        private readonly IUserContextService _userContextService;
         private readonly UserService _userService;
 
-        public BalanceController(BalanceService balanceService, UserContextService userContextService, UserService userService)
+        public BalanceController(BalanceService balanceService, IUserContextService userContextService, UserService userService)
         {
             _balanceService = balanceService;
             _userContextService = userContextService;
             _userService = userService;
         }
 
-        [Authorize]
-        [Route("api/GetBalance")]
         [HttpGet]
+        [Authorize]
+        [Route("api/balance")]
         public async Task<IActionResult> GetBalanceAsync()
         {
             var userId = _userContextService.GetCurrentUserId();
@@ -33,13 +34,13 @@ namespace CasinoApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
         [Authorize]
-        [Route("api/ChangeBalance")]
-        [HttpGet]
-        public async Task<IActionResult> ChangeUserBalance(decimal amount)
+        [Route("api/balance/change")]
+        public async Task<IActionResult> ChangeUserBalance([FromBody] ChangeBalanceDto changeBalanceDto)
         {
             var userId = _userContextService.GetCurrentUserId();
-            var result = await _balanceService.ChangeUserBalance(userId, amount);
+            var result = await _balanceService.ChangeUserBalance(userId, changeBalanceDto.Amount);
 
             if (!result.Success)
                 return BadRequest(result);

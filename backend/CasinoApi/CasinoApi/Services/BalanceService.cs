@@ -1,14 +1,38 @@
 ﻿using CasinoApi.Data;
-using Microsoft.EntityFrameworkCore;
+using CasinoApi.Models;
 
 namespace CasinoApi.Services
 {
     public class BalanceService
     {
         private readonly ApplicationDbContext _db;
-        public BalanceService(ApplicationDbContext db) 
+        private readonly UserService _userService;
+        public BalanceService(ApplicationDbContext db, UserService userService) 
         { 
             _db = db;
+            _userService = userService;
+        }
+
+        public async Task<OperationResult<decimal>> GetUserBalance(Guid userId)
+        {
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+                return OperationResult<decimal>.Fail("User not found");
+
+            return OperationResult<decimal>.Ok(user.Balance);
+        }
+
+        public async Task<OperationResult> ChangeUserBalance(Guid userId, decimal amount)
+        {
+            var user = await _userService.GetUserById(userId);
+            if (user == null)
+                return OperationResult.Fail("User not found");
+
+            user.Balance += amount;
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
+
+            return OperationResult.Ok();
         }
     }
 }

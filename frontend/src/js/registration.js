@@ -30,7 +30,7 @@ async function registUser(user){
 
         const result = response.json();
 
-        if(!result.ok || !result.success){
+        if(!response.ok || !result.success){
             if (Array.isArray(result.errors)) {
                 result.errors.forEach(err => UIHelper.showMessage(err, "error"));
             } else {

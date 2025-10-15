@@ -14,8 +14,10 @@ export class GuessNumber{
         this.#balanceService = new BalanceService();
     }
     
-    playGuessNumberGame(){
-        if(!Validator.validateUserBet(this.guessNumberBetInput)) return;
+    async playGuessNumberGame(){
+        const isBetValid = await Validator.validateUserBet(this.guessNumberBetInput);
+        if (!isBetValid)
+            return;
         const userBet = parseFloat(this.guessNumberBetInput.value);
         const userNumber = parseFloat(this.guessNumberUserNumberInput.value);
         if(isNaN(userNumber) || userNumber > 10 || userNumber < 1){
@@ -30,14 +32,14 @@ export class GuessNumber{
             this.guessNumberWinOrLoseEl.classList.remove("lose");
             this.guessNumberWinOrLoseEl.classList.add("win");
             this.guessNumberWonValueEl.textContent = userBet * 10;
-            this.#balanceService.addMoneyToBalance(userBet * 10);
+            await this.#balanceService.changeBalance(userBet * 10);
         }
         else{
             this.guessNumberWinOrLoseEl.textContent = "You lost. Correct number was " + randomNumber;
             this.guessNumberWinOrLoseEl.classList.remove("win");
             this.guessNumberWinOrLoseEl.classList.add("lose");
             this.guessNumberWonValueEl.textContent = "-" + userBet;
-            this.#balanceService.deductMoneyFromBalance(userBet);
+            await this.#balanceService.changeBalance(-userBet);
         }
     }
 }

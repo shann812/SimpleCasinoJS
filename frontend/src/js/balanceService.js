@@ -10,22 +10,54 @@ export class BalanceService{
             this.#updateUI();
         }
         else{
-            sessionStorage.setItem("userBalance", parseFloat(this.balanceEl.textContent));
+            //TODO: please login or create account message
         }
     }
 
-    getUserBalance(){
-        return parseFloat(sessionStorage.getItem("userBalance"));
+    async getUserBalance(){
+        const response = await fetch("https://localhost:7181/api/balance", {
+            method: "GET",
+            headers: { 
+                "Authorization": "Bearer " + localStorage.getItem("token") 
+            }
+        });
+
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            console.log("нашло ошибку" + "respo" + result.errors[0]);
+            if (Array.isArray(result.errors)) {
+                result.errors.forEach(err => UIHelper.showMessage(err, "error"));
+            } else {
+                UIHelper.showMessage("Unknown error occurred (frontend)", "error");
+            }
+            return;
+        }
+
+        return Number(result.message);
     }
 
-    addMoneyToBalance(value){
-        sessionStorage.setItem("userBalance", this.getUserBalance() + value);
-        this.#updateUI();
-    }
+    async changeBalance(amount){
+        const response = await fetch("https://localhost:7181/api/balance/change", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token") 
+            },
+            body: JSON.stringify({ amount })
+        });
 
-    deductMoneyFromBalance(value){
-        sessionStorage.setItem("userBalance", this.getUserBalance() - value);
-        this.#updateUI();
+        const result = await response.json();
+        if(!response.ok || !result.success){ //TODO: separete this block to another method in UIHelper
+            if (Array.isArray(result.errors)) {
+                result.errors.forEach(err => UIHelper.showMessage(err, "error"));
+            } else {
+                UIHelper.showMessage("Unknown error occurred (frontend)", "error");
+            }
+            return;
+        }
+
+        await this.#updateUI();
     }
 
     depositMoneyOnBalance(){
@@ -37,18 +69,19 @@ export class BalanceService{
             return;
         }
 
-        this.addMoneyToBalance(depositValue);
+        this.changeBalance(depositValue);
         this.depositMoneyInput.value = "";
 
         const message = "Your balance succesfully replenished by " + depositValue;
         UIHelper.showMessage(message, "success");
     }
 
-    #updateUI(){
-        this.balanceEl.textContent = sessionStorage.getItem("userBalance");
+    async #updateUI(){
+        const balance = await this.getUserBalance();
+        this.balanceEl.textContent = balance;
     }
 
-    #isSessionExist(){
+    #isSessionExist(){ //chzh
         const userBalance = sessionStorage.getItem("userBalance");
         return userBalance !== null;
     }

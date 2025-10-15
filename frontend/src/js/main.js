@@ -97,17 +97,17 @@ openGuessNumberBtn.addEventListener("click", function(event) {
 })
 
 const coinflipGame = new Coinflip();
-playCoinflipHeadsBtn.addEventListener("click", function(event) {
-    coinflipGame.playCoinflip("heads");
+playCoinflipHeadsBtn.addEventListener("click", async function(event) {
+    await coinflipGame.playCoinflip("heads");
 })
 
-playCoinflipTailsBtn.addEventListener("click", function(event) {
-    coinflipGame.playCoinflip("tails");
+playCoinflipTailsBtn.addEventListener("click", async function(event) {
+    await coinflipGame.playCoinflip("tails");
 })
 
 const guessNumberGame = new GuessNumber();
-playGuessNumberGameBtn.addEventListener("click", function(event) {
-    guessNumberGame.playGuessNumberGame();
+playGuessNumberGameBtn.addEventListener("click", async function(event) {
+    await guessNumberGame.playGuessNumberGame();
 })
 
 
@@ -118,6 +118,7 @@ function toggleGameSectionAndHideOthers(gameSectionToShow){
     });
 }
 
+//WHY LOGIN IS HERE
 async function loginUser(userLogin){
     try{
         const response = await fetch("https://localhost:7181/api/users/login", {
