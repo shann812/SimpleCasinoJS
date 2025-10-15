@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace CasinoApi.Models
+﻿namespace CasinoApi.Models
 {
     public class OperationResult
     {
@@ -15,5 +13,18 @@ namespace CasinoApi.Models
 
         public static OperationResult Ok()
             => new ();
+    }
+
+    public class OperationResult<T> : OperationResult
+    {
+        public T Message { get; set; }
+        public static OperationResult<T> Fail(string error)
+            => new() { Success = false, Errors = new() { error } };
+
+        public static OperationResult<T> Fail(List<string> errors)
+            => new() { Success = false, Errors = errors };
+
+        public static OperationResult<T> Ok(T data) 
+            => new() { Message = data };
     }
 }

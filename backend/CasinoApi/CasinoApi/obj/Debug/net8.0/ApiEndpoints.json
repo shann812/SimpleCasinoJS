@@ -2,7 +2,7 @@
   {
     "ContainingType": "CasinoApi.Controllers.BalanceController",
     "Method": "GetBalanceAsync",
-    "RelativePath": "api/Balance",
+    "RelativePath": "api/GetBalance",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

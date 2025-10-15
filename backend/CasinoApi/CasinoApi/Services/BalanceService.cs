@@ -1,11 +1,14 @@
-﻿namespace CasinoApi.Services
+﻿using CasinoApi.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace CasinoApi.Services
 {
     public class BalanceService
     {
-        public Task<int> GetBalanceAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-            //TODO
+        private readonly ApplicationDbContext _db;
+        public BalanceService(ApplicationDbContext db) 
+        { 
+            _db = db;
         }
     }
 }
