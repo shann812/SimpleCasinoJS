@@ -7,7 +7,7 @@ export class BalanceService{
         this.depositMoneyInput = UIHelper.getElement("depositMoneySum");
 
         if(this.#isSessionExist()){
-            this.#updateUI();
+            this.updateUI();
         }
         else{
             //TODO: please login or create account message
@@ -57,7 +57,7 @@ export class BalanceService{
             return;
         }
 
-        await this.#updateUI();
+        await this.updateUI();
     }
 
     depositMoneyOnBalance(){
@@ -76,7 +76,7 @@ export class BalanceService{
         UIHelper.showMessage(message, "success");
     }
 
-    async #updateUI(){
+    async updateUI(){
         const balance = await this.getUserBalance();
         this.balanceEl.textContent = balance;
     }

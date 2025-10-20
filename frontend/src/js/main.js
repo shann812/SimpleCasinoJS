@@ -6,7 +6,6 @@ import { Validator } from "./validator.js";
 import { ToastManager } from "./toastManager.js";
 ToastManager.init();
 
-//TODO: fix style, add header
 const loginBtn = UIHelper.getElement("loginBtn");
 const registrationBtn = UIHelper.getElement("registrationBtn");
 const loginFormSection = UIHelper.getElement("loginFormSection");
@@ -30,20 +29,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
 
-    const greetingDiv = document.getElementById("userGreeting");
-    const usernameSpan = document.getElementById("usernameDisplay");
-    const authButtons = document.getElementById("authButtons");
-    const logoutBtn = document.getElementById("logoutBtn");
+    const userSection = UIHelper.getElement("userSection");
+    const authSection = UIHelper.getElement("authSection");
+    const balanceSection = UIHelper.getElement("balanceSection");
 
-    if (token && username) {
+    const usernameSpan = UIHelper.getElement("usernameDisplay");
+    const logoutBtn = UIHelper.getElement("logoutBtn");
+
+    //TODO: saparate this to other methods
+    const isUserLogin = token && username
+    if (isUserLogin) {
         usernameSpan.textContent = username;
-        greetingDiv.style.display = "block";
-        authButtons.style.display = "none";
-        logoutBtn.style.display = "inline-block";
+        userSection.style.display = "block";
+        authSection.style.display = "none";
+        balanceSection.style.visibility = "visible";
+
+        const balanceService = new BalanceService();
+        balanceService.updateUI();
     } else {
-        greetingDiv.style.display = "none";
-        authButtons.style.display = "flex";
-        logoutBtn.style.display = "none";
+        userSection.style.display = "none";
+        authSection.style.display = "block";
+        balanceSection.style.visibility = "hidden";
     }
 
     logoutBtn.addEventListener("click", () => {

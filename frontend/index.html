@@ -7,26 +7,25 @@
     <title>Casino</title>
 </head>
 
-<header>
-    <div id="userGreeting" style="display: none;">👋 Welcome, <span id="usernameDisplay"></span></div>
-    <button id="logoutBtn" style="display: none;">Log out</button>
-    <div id="authButtons">
-        <button id="loginBtn">Log in</button>
-        <button id="registrationBtn">Registration</button>
-    </div>  
+<header class="header">
+    <div id ="balanceSection" class="header-left" style="visibility: hidden;">
+        <span class="balance">Your balance: <span id="balance">100</span> $</span>
+        <button id="openDepositFormBtn">Deposit</button>
+    </div>
+    <div class="header-right">
+        <div id="userSection" style="display: none;">
+            <span class="greeting">👋 Welcome, <span id="usernameDisplay"></span></span>
+            <button id="logoutBtn">Log out</button>
+        </div>
+        <div id="authSection">
+            <button id="loginBtn">Log in</button>
+            <button id="registrationBtn">Registration</button>
+        </div>
+    </div>
 </header>
 
 <body>
     <h1>Casino</h1>
-    <h3>Your balance: <span id="balance">100</span> $ </h3><br>
-    <button id="openDepositFormBtn">Deposit money</button>
-    <div id="depositSection" style="display: none;">
-        <form id="depositForm">
-            <p>How much money you wanna deposit:</p><br>
-            <input type="text" id="depositMoneySum" placeholder="100$"><br>
-            <button type="submit">Deposit</button>
-        </form>
-    </div>
 
     <h2>Games:</h2>
     <button id="openCoinflipBtn">Coin Flip</button>
@@ -62,6 +61,14 @@
         </div>
     </div>
 
+    <div id="depositSection" style="display: none;">
+        <form id="depositForm">
+            <p>How much money you wanna deposit:</p><br>
+            <input type="text" id="depositMoneySum" placeholder="100$"><br>
+            <button type="submit">Deposit</button>
+        </form>
+    </div>
+    
     <div id="loginFormSection" style="display: none;">
         <form id="loginForm">
             <p>Email:</p>
