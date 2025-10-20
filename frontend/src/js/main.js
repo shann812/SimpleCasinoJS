@@ -12,7 +12,6 @@ const loginFormSection = UIHelper.getElement("loginFormSection");
 const loginForm = UIHelper.getElement("loginForm");
 
 const openDepositFormBtn = UIHelper.getElement("openDepositFormBtn");
-const depositSection = UIHelper.getElement("depositSection");
 const depositForm = UIHelper.getElement("depositForm");
 
 const openCoinflipBtn = UIHelper.getElement("openCoinflipBtn");
@@ -60,10 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) {
+            closeModal(modal.id);
+        }
+    });
+});
 
-loginBtn.addEventListener("click", function(event) {
-    loginFormSection.style.display = (loginFormSection.style.display == "block") ? "none" : "block"
-})
+loginBtn.addEventListener('click', () => showModal('loginModal'));
 
 loginForm.addEventListener("submit", async function(e) {
     e.preventDefault();
@@ -82,14 +86,13 @@ registrationBtn.addEventListener("click", function(event) {
     window.location.href = "registration.html";
 })
 
-openDepositFormBtn.addEventListener("click", function(event) {
-    depositSection.style.display = (depositSection.style.display == "block") ? "none" : "block"
-})
+openDepositFormBtn.addEventListener('click', () => showModal('depositModal'));
 
 depositForm.addEventListener("submit", function(event) {
     event.preventDefault();
     const balanceService = new BalanceService();
     balanceService.depositMoneyOnBalance();
+    closeModal("depositModal");
 });
 
 openCoinflipBtn.addEventListener("click", function(event) {
@@ -116,12 +119,19 @@ playGuessNumberGameBtn.addEventListener("click", async function(event) {
     await guessNumberGame.playGuessNumberGame();
 })
 
-
 function toggleGameSectionAndHideOthers(gameSectionToShow){
     const games = [coinflipSection, guessNumberSection];
      games.forEach(game => {
         game.style.display = ((game === gameSectionToShow) && gameSectionToShow.style.display == "none") ? "block" : "none";
     });
+}
+
+function showModal(modalId) {
+    document.getElementById(modalId).classList.add('show');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
 }
 
 //WHY LOGIN IS HERE
@@ -158,3 +168,6 @@ async function loginUser(userLogin){
         console.error(err);
     }
 }
+
+window.showModal = showModal;
+window.closeModal = closeModal;

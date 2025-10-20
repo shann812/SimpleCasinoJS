@@ -61,22 +61,28 @@
         </div>
     </div>
 
-    <div id="depositSection" style="display: none;">
-        <form id="depositForm">
-            <p>How much money you wanna deposit:</p><br>
-            <input type="text" id="depositMoneySum" placeholder="100$"><br>
-            <button type="submit">Deposit</button>
-        </form>
+    <div id="depositModal" class="modal-overlay">
+        <div class="modal-content">
+            <button type="button" class="modal-close" onclick="closeModal('depositModal')">&times;</button>
+            <form id="depositForm">
+                <p>How much money you wanna deposit:</p><br>
+                <input type="text" id="depositMoneySum" placeholder="100$"><br>
+                <button type="submit">Deposit</button>
+            </form>
+        </div>
     </div>
-    
-    <div id="loginFormSection" style="display: none;">
-        <form id="loginForm">
-            <p>Email:</p>
-            <input type="email" id="email" required>
-            <p>Password:</p>
-            <input type="password" id="password" required>
-            <button type="submit">Log in</button>
-        </form>
+
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <button type="button" class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            <form id="loginForm">
+                <p>Email:</p>
+                <input type="email" id="email" required>
+                <p>Password:</p>
+                <input type="password" id="password" required>
+                <button type="submit">Log in</button>
+            </form>
+        </div>
     </div>
 
     <div id="toast-container"></div>
