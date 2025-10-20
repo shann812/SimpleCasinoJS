@@ -107,6 +107,7 @@ openGuessNumberBtn.addEventListener("click", function(event) {
 
 const coinflipGame = new Coinflip();
 playCoinflipHeadsBtn.addEventListener("click", async function(event) {
+    if(!checkIsUserLogin()) return;
     await coinflipGame.playCoinflip("heads");
 })
 
@@ -116,8 +117,17 @@ playCoinflipTailsBtn.addEventListener("click", async function(event) {
 
 const guessNumberGame = new GuessNumber();
 playGuessNumberGameBtn.addEventListener("click", async function(event) {
+    if(!checkIsUserLogin()) return;
     await guessNumberGame.playGuessNumberGame();
 })
+
+function checkIsUserLogin(){
+    if(!isUserLogin()){
+        UIHelper.showMessage("Please login to play", "error");
+        return false;
+    }
+    return true;
+}
 
 function toggleGameSectionAndHideOthers(gameSectionToShow){
     const games = [coinflipSection, guessNumberSection];
@@ -132,6 +142,12 @@ function showModal(modalId) {
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
+}
+
+function isUserLogin(){
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+    return token && username;
 }
 
 //WHY LOGIN IS HERE

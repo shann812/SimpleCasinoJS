@@ -15,7 +15,8 @@ export class Coinflip{
     }
 
     async playCoinflip(choosenSide){
-        const isBetValid = await Validator.validateUserBet(this.coinflipBetInput);
+        const userBalance = await this.#balanceService.getUserBalance();
+        const isBetValid = await Validator.validateUserBet(this.coinflipBetInput, userBalance);
         if (!isBetValid)
             return;
         const userBet = parseFloat(this.coinflipBetInput.value);

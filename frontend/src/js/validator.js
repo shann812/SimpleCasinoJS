@@ -3,14 +3,13 @@ import { UIHelper } from "./UIHelper.js";
 
 export class Validator{
 
-    static async validateUserBet(betInput){
+    static async validateUserBet(betInput, userBalance){
         const userBet = parseFloat(betInput.value);
         if(isNaN(userBet) || userBet <= 0){
             UIHelper.showMessage("Enter correct bet value", "error");
             return false;
         }
         
-        const userBalance = await this.getUserBalance();
         if(userBet > userBalance){
             UIHelper.showMessage("Your bet exceeds your balance.", "error");
             return false;
@@ -46,11 +45,5 @@ export class Validator{
         }
         
         return true;
-    }
-
-    //TODO: this is trashcode
-    static async getUserBalance(){
-        const _balanceService = new BalanceService();
-        return await _balanceService.getUserBalance();
     }
 }

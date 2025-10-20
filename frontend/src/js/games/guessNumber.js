@@ -15,7 +15,8 @@ export class GuessNumber{
     }
     
     async playGuessNumberGame(){
-        const isBetValid = await Validator.validateUserBet(this.guessNumberBetInput);
+        const userBalance = await this.#balanceService.getUserBalance();
+        const isBetValid = await Validator.validateUserBet(this.guessNumberBetInput, userBalance);
         if (!isBetValid)
             return;
         const userBet = parseFloat(this.guessNumberBetInput.value);
