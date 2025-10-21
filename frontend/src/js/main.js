@@ -4,11 +4,11 @@ import { BalanceService } from "./balanceService.js";
 import { UIHelper } from "./UIHelper.js";
 import { Validator } from "./validator.js";
 import { ToastManager } from "./toastManager.js";
+import { AccountService } from "./AccountService.js";
 ToastManager.init();
 
 const loginBtn = UIHelper.getElement("loginBtn");
 const registrationBtn = UIHelper.getElement("registrationBtn");
-const loginFormSection = UIHelper.getElement("loginFormSection");
 const loginForm = UIHelper.getElement("loginForm");
 
 const openDepositFormBtn = UIHelper.getElement("openDepositFormBtn");
@@ -52,10 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-        localStorage.removeItem("role");
-        location.reload();
+        AccountService.logoutUser();
     });
 });
 
@@ -78,7 +75,7 @@ loginForm.addEventListener("submit", async function(e) {
     }
     
     if(Validator.validateUserLogin(userLogin)){
-        await loginUser(userLogin);
+        await AccountService.loginUser(userLogin);
     };
 })
 
@@ -122,7 +119,7 @@ playGuessNumberGameBtn.addEventListener("click", async function(event) {
 })
 
 function checkIsUserLogin(){
-    if(!isUserLogin()){
+    if(!AccountService.isUserLogin()){
         UIHelper.showMessage("Please login to play", "error");
         return false;
     }
@@ -142,47 +139,6 @@ function showModal(modalId) {
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
-}
-
-function isUserLogin(){
-    const token = localStorage.getItem("token");
-    const username = localStorage.getItem("username");
-    return token && username;
-}
-
-//WHY LOGIN IS HERE
-async function loginUser(userLogin){
-    try{
-        const response = await fetch("https://localhost:7181/api/users/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(userLogin)
-        });
-        if(!response.ok){
-            const jsonErrors = await response.json();
-
-            if (Array.isArray(jsonErrors.errors)) {
-                jsonErrors.errors.forEach(err => UIHelper.showMessage(err, "error"));
-            } else {
-                UIHelper.showMessage("Unknown error occurred (frontend)", "error");
-            }
-        }
-        else{
-            const data = await response.json();
-
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("username", data.username);
-            localStorage.setItem("role", data.role);
-
-            //TODO: fix toasts
-            UIHelper.showMessage("Logged in successfully", "success");
-            window.location.href = "index.html";
-        }
-    }
-    catch(err){
-        UIHelper.showMessage("Network error", "error");
-        console.error(err);
-    }
 }
 
 window.showModal = showModal;
