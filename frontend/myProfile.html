@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/assets/style.css">
+    <title>My profile</title>
+</head>
+<body>
+    <p>Username: <span id="username">_username</span></p>
+    <p>Email: <span id="email">_email</span></p>
+    <p>Balance: </p><span id="balance">_balance</span>
+    <button id="withdrawBtn">Withdraw</button>
+    <p>Account created at: <span id="regDate">_date</span></p>
+
+    <p>Bet history: </p>
+    <div> 
+        <div>
+            <p id="gameName"></p>
+            <p id="winnings"></p>
+            <p id="betDate"></p>
+            <p id="balanceAfterBet"></p>
+        </div>
+        <button id="loadMoreBetsBtn">Load more</button>
+    </div>
+</body>
+
+<script type="module" src="./src/js/myProfile.js"></script>
+</html>
