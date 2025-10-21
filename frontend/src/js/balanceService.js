@@ -1,4 +1,5 @@
 import { UIHelper } from "./UIHelper.js";
+import { AccountService } from "./AccountService.js";
 
 export class BalanceService{
 
@@ -6,7 +7,7 @@ export class BalanceService{
         this.balanceEl = UIHelper.getElement("balance");
         this.depositMoneyInput = UIHelper.getElement("depositMoneySum");
 
-        if(this.#isSessionExist()){
+        if(AccountService.isUserLogin()){
             this.updateUI();
         }
         else{
@@ -25,15 +26,10 @@ export class BalanceService{
         const result = await response.json();
 
         if(!response.ok || !result.success){
-            if (Array.isArray(result.errors)) {
-                result.errors.forEach(err => UIHelper.showMessage(err, "error"));
-            } else {
-                UIHelper.showMessage("Unknown error occurred (frontend)", "error");
-            }
+            UIHelper.showErrors(result);
             return;
         }
 
-        //TODO: fix it should be data not message
         return Number(result.data);
     }
 
@@ -48,12 +44,8 @@ export class BalanceService{
         });
 
         const result = await response.json();
-        if(!response.ok || !result.success){ //TODO: separete this block to another method in UIHelper
-            if (Array.isArray(result.errors)) {
-                result.errors.forEach(err => UIHelper.showMessage(err, "error"));
-            } else {
-                UIHelper.showMessage("Unknown error occurred (frontend)", "error");
-            }
+        if(!response.ok || !result.success){
+            UIHelper.showErrors(result);
             return;
         }
 
@@ -79,10 +71,5 @@ export class BalanceService{
     async updateUI(){
         const balance = await this.getUserBalance();
         this.balanceEl.textContent = balance;
-    }
-
-    #isSessionExist(){ //chzh
-        const userBalance = sessionStorage.getItem("userBalance");
-        return userBalance !== null;
     }
 }

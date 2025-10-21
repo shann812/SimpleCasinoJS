@@ -13,11 +13,7 @@ export class AccountService{
             const result = await response.json();
     
             if(!response.ok || !result.success){
-                if (Array.isArray(result.errors)) {
-                    result.errors.forEach(err => UIHelper.showMessage(err, "error"));
-                } else {
-                    UIHelper.showMessage("Unknown error occurred (frontend)", "error");
-                }
+                UIHelper.showErrors(result);
                 return;
             }
 
@@ -45,13 +41,8 @@ export class AccountService{
             });
 
             const result = await response.json();
-            if(!response.ok || !result.success){
-                if (Array.isArray(jsonErrors.errors)) {
-                    jsonErrors.errors.forEach(err => UIHelper.showMessage(err, "error"));
-                } else {
-                    UIHelper.showMessage("Unknown error occurred (frontend)", "error");
-                }
-            }
+            if(!response.ok || !result.success)
+                UIHelper.showErrors(result);
             else{
                 localStorage.setItem("token", result.data.token);
                 localStorage.setItem("username", result.data.username);
@@ -92,8 +83,9 @@ export class AccountService{
 
         const result = await response.json();
         if(!response.ok || !result.success){
-            //go to index and show errors
-            //TODO: make function in UIHelper to show all message in result
+            localStorage.setItem("toastMessage", "Unable to load profile info");
+            localStorage.setItem("toastType", "error");
+            window.location.href = "index.html";
         }
 
         const userInfo = {

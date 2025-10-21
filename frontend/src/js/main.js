@@ -11,6 +11,10 @@ const loginBtn = UIHelper.getElement("loginBtn");
 const registrationBtn = UIHelper.getElement("registrationBtn");
 const loginForm = UIHelper.getElement("loginForm");
 
+const userSection = UIHelper.getElement("userSection");
+const authSection = UIHelper.getElement("authSection");
+const balanceSection = UIHelper.getElement("balanceSection");
+
 const usernameSpan = UIHelper.getElement("usernameDisplay");
 const myProfileBtn = UIHelper.getElement("myProfileBtn");
 const logoutBtn = UIHelper.getElement("logoutBtn");
@@ -29,28 +33,8 @@ const playGuessNumberGameBtn = UIHelper.getElement("playGuessNumberGameBtn");
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
-    const username = localStorage.getItem("username");
-
-    const userSection = UIHelper.getElement("userSection");
-    const authSection = UIHelper.getElement("authSection");
-    const balanceSection = UIHelper.getElement("balanceSection");
-
-    //TODO: saparate this to other methods
-    const isUserLogin = token && username
-    if (isUserLogin) {
-        usernameSpan.textContent = username;
-        userSection.style.display = "block";
-        authSection.style.display = "none";
-        balanceSection.style.visibility = "visible";
-
-        const balanceService = new BalanceService();
-        balanceService.updateUI();
-    } else {
-        userSection.style.display = "none";
-        authSection.style.display = "block";
-        balanceSection.style.visibility = "hidden";
-    }
+    showToastIfStored();
+    updateUI();
 });
 
 document.querySelectorAll('.modal-overlay').forEach(modal => {
@@ -145,6 +129,33 @@ function showModal(modalId) {
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
+}
+
+function showToastIfStored(){
+    const message = localStorage.getItem("toastMessage");
+    const type = localStorage.getItem("toastType");
+
+    if (message) {
+        UIHelper.showMessage(message, type || "info");
+        localStorage.removeItem("toastMessage");
+        localStorage.removeItem("toastType");
+    }
+}
+
+function updateUI(){
+    if (AccountService.isUserLogin()) {
+        usernameSpan.textContent = localStorage.getItem("username");
+        userSection.style.display = "block";
+        authSection.style.display = "none";
+        balanceSection.style.visibility = "visible";
+
+        const balanceService = new BalanceService();
+        balanceService.updateUI();
+    } else {
+        userSection.style.display = "none";
+        authSection.style.display = "block";
+        balanceSection.style.visibility = "hidden";
+    }
 }
 
 window.showModal = showModal;

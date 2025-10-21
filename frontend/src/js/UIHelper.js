@@ -20,7 +20,11 @@ export class UIHelper{
         window.dispatchEvent(event);
     }
 
-    static showErrors(){
-        
+    static showErrors(badResult){
+        if (Array.isArray(badResult.errors)) {
+            badResult.errors.forEach(err => UIHelper.showMessage(err, "error"));
+        } else {
+            UIHelper.showMessage("Unknown error occurred (frontend)", "error");
+        }
     }
 }

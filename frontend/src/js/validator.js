@@ -1,4 +1,3 @@
-import { BalanceService } from "./balanceService.js";
 import { UIHelper } from "./UIHelper.js";
 
 export class Validator{
@@ -23,10 +22,14 @@ export class Validator{
             UIHelper.showMessage("User name must be 4-20 characters");
             return;
         }
-            //password
+
         if(!user.email.includes("@")){
             UIHelper.showMessage("Please enter correct email");
             return;
+        }
+
+        if(user.password.lenght < 6){
+            UIHelper.showMessage("Password must be at least 6 characters");
         }
 
         if(user.password !== user.passwordRepeat){
