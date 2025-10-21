@@ -92,7 +92,7 @@ export class AccountService{
             username: result.data.username,
             email: result.data.email,
             balance: result.data.balance,
-            regDate: result.data.registrationDate
+            regDate: UIHelper.formatDate(result.data.registrationDate)
         }
 
         return userInfo;

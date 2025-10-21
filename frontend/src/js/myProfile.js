@@ -12,6 +12,7 @@ const withdrawBtn = UIHelper.getElement("withdrawBtn");
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadUserInfo();
+
     //TODO: fix 401 if user login some time ago
 });
 
@@ -24,3 +25,5 @@ async function loadUserInfo(){
     //TODO: fix the date output
     regDate.textContent = userInfo.regDate;
 }
+
+//TODO: add bet history

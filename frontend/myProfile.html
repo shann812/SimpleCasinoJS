@@ -7,19 +7,18 @@
     <title>My profile</title>
 </head>
 <body>
-    <p>Username: <span id="username">_username</span></p>
-    <p>Email: <span id="email">_email</span></p>
-    <p>Balance: </p><span id="balance">_balance</span>
-    <button id="withdrawBtn">Withdraw</button>
-    <p>Account created at: <span id="regDate">_date</span></p>
+    <div class="my-profile-container">
+        <div class="user-info">
+            <p>Username: <span id="username">_username</span></p>
+            <p>Email: <span id="email">_email</span></p>
+            <p>Balance: <span id="balance">_balance</span></p>
+            <button id="withdrawBtn">Withdraw</button>
+            <p>Account created at: <span id="regDate">_date</span></p>
+        </div>
 
-    <p>Bet history: </p>
-    <div> 
-        <div>
-            <p id="gameName"></p>
-            <p id="winnings"></p>
-            <p id="betDate"></p>
-            <p id="balanceAfterBet"></p>
+        <p>Bet history:</p>
+        <div id="betHistory" class="bet-history">
+            
         </div>
         <button id="loadMoreBetsBtn">Load more</button>
     </div>
