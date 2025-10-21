@@ -43,6 +43,16 @@
   },
   {
     "ContainingType": "CasinoApi.Controllers.UsersController",
+    "Method": "GetCurrentUserInfo",
+    "RelativePath": "api/users/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CasinoApi.Controllers.UsersController",
     "Method": "RegisterAsync",
     "RelativePath": "api/users/register",
     "HttpMethod": "POST",

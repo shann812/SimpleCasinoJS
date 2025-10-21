@@ -25,7 +25,6 @@ export class BalanceService{
         const result = await response.json();
 
         if(!response.ok || !result.success){
-            console.log("нашло ошибку" + "respo" + result.errors[0]);
             if (Array.isArray(result.errors)) {
                 result.errors.forEach(err => UIHelper.showMessage(err, "error"));
             } else {
@@ -34,6 +33,7 @@ export class BalanceService{
             return;
         }
 
+        //TODO: fix it should be data not message
         return Number(result.message);
     }
 

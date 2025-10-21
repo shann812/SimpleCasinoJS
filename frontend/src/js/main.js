@@ -11,6 +11,10 @@ const loginBtn = UIHelper.getElement("loginBtn");
 const registrationBtn = UIHelper.getElement("registrationBtn");
 const loginForm = UIHelper.getElement("loginForm");
 
+const usernameSpan = UIHelper.getElement("usernameDisplay");
+const myProfileBtn = UIHelper.getElement("myProfileBtn");
+const logoutBtn = UIHelper.getElement("logoutBtn");
+
 const openDepositFormBtn = UIHelper.getElement("openDepositFormBtn");
 const depositForm = UIHelper.getElement("depositForm");
 
@@ -32,9 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const authSection = UIHelper.getElement("authSection");
     const balanceSection = UIHelper.getElement("balanceSection");
 
-    const usernameSpan = UIHelper.getElement("usernameDisplay");
-    const logoutBtn = UIHelper.getElement("logoutBtn");
-
     //TODO: saparate this to other methods
     const isUserLogin = token && username
     if (isUserLogin) {
@@ -50,10 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
         authSection.style.display = "block";
         balanceSection.style.visibility = "hidden";
     }
-
-    logoutBtn.addEventListener("click", () => {
-        AccountService.logoutUser();
-    });
 });
 
 document.querySelectorAll('.modal-overlay').forEach(modal => {
@@ -82,6 +79,14 @@ loginForm.addEventListener("submit", async function(e) {
 registrationBtn.addEventListener("click", function(event) {
     window.location.href = "registration.html";
 })
+
+myProfileBtn.addEventListener("click", () => {
+        window.location.href = "myProfile.html";
+});
+
+logoutBtn.addEventListener("click", () => {
+        AccountService.logoutUser();
+});
 
 openDepositFormBtn.addEventListener('click', () => showModal('depositModal'));
 
@@ -117,6 +122,7 @@ playGuessNumberGameBtn.addEventListener("click", async function(event) {
     if(!checkIsUserLogin()) return;
     await guessNumberGame.playGuessNumberGame();
 })
+
 
 function checkIsUserLogin(){
     if(!AccountService.isUserLogin()){

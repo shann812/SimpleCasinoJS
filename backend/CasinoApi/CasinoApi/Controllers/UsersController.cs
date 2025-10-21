@@ -1,6 +1,8 @@
 ﻿using CasinoApi.Dto;
+using CasinoApi.Interfaces;
 using CasinoApi.Models;
 using CasinoApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasinoApi.Controllers
@@ -10,9 +12,12 @@ namespace CasinoApi.Controllers
     public class UsersController : Controller
     {
         private readonly UserService _userService;
-        public UsersController(UserService userService)
+        private readonly IUserContextService _userContextService;
+
+        public UsersController(UserService userService, IUserContextService userContextService)
         {
             _userService = userService;
+            _userContextService = userContextService;
         }
 
         [HttpPost("register")]
@@ -44,6 +49,20 @@ namespace CasinoApi.Controllers
 
             //TODO: return operationResultDto
             return Ok(new { token, user.Username, user.Role });
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUserInfo()
+        {
+            var userId = _userContextService.GetCurrentUserId();
+            var getUserInfoResult = await _userService.GetUserInfoAsync(userId);
+            if(!getUserInfoResult.Success)
+            {
+                //log
+                return BadRequest(getUserInfoResult);
+            }
+            return Ok(getUserInfoResult);
         }
     }
 }

@@ -2,6 +2,7 @@
 using CasinoApi.Dto;
 using CasinoApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace CasinoApi.Services
 {
@@ -88,5 +89,33 @@ namespace CasinoApi.Services
 
         public async Task<User?> GetUserById(Guid userId) 
             => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+        public async Task<OperationResult<UserInfoDto>> GetUserInfoAsync(Guid userId)
+        {
+            try
+            {
+                var user = await GetUserById(userId);
+                if(user == null)
+                {
+                    //log
+                    return OperationResult<UserInfoDto>.Fail("Cannot find user");
+                }
+
+                var userInfo = new UserInfoDto
+                {
+                    Username = user.Username,
+                    Email = user.Email,
+                    Balance = user.Balance,
+                    RegistrationDate = user.RegistrationDate
+                };
+
+                return OperationResult<UserInfoDto>.Ok(userInfo);
+            }
+            catch(Exception ex)
+            {
+                //log
+                return OperationResult<UserInfoDto>.Fail("Server error. Exception: " + ex);
+            }
+        }
     }
 }

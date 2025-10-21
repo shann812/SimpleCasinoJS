@@ -216,6 +216,7 @@ input[type="text"]:focus {
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
+#myProfileBtn,
 #authSection button,
 #logoutBtn {
     background-color: #ff4444;
@@ -228,6 +229,7 @@ input[type="text"]:focus {
     transition: all 0.3s ease;
 }
 
+#myProfileBtn:hover,
 #authSection button:hover,
 #logoutBtn:hover {
     background-color: #ff6666;

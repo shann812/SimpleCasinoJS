@@ -47,6 +47,5 @@ namespace CasinoApi.Controllers
 
             return Ok(result);
         }
-        //TODO: add balance change api methods and test it
     }
 }

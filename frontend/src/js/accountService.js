@@ -80,4 +80,29 @@ export class AccountService{
         const username = localStorage.getItem("username");
         return token && username;
     }
+
+    static async getUserInfo(){
+        const response = await fetch("https://localhost:7181/api/users/me", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        });
+
+        const result = await response.json();
+        if(!response.ok || !result.success){
+            //go to index and show errors
+            //TODO: make function in UIHelper to show all message in result
+        }
+
+        //TODO: refactor message to data (OperationResult)
+        const userInfo = {
+            username: result.message.username,
+            email: result.message.email,
+            balance: result.message.balance,
+            regDate: result.message.registrationDate
+        }
+
+        return userInfo;
+    }
 }
