@@ -26,7 +26,9 @@ export class AccountService{
                 password: user.password
             });
             UIHelper.showMessage(result.data ?? "Account created successfully", "success");
-            window.location.href = "index.html";
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1000);
         }
         catch(ex){
             UIHelper.showMessage("Network error", "error");
@@ -41,9 +43,9 @@ export class AccountService{
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userLogin)
             });
-            if(!response.ok){
-                const jsonErrors = await response.json();
 
+            const result = await response.json();
+            if(!response.ok || !result.success){
                 if (Array.isArray(jsonErrors.errors)) {
                     jsonErrors.errors.forEach(err => UIHelper.showMessage(err, "error"));
                 } else {
@@ -51,15 +53,14 @@ export class AccountService{
                 }
             }
             else{
-                const data = await response.json();
+                localStorage.setItem("token", result.data.token);
+                localStorage.setItem("username", result.data.username);
+                localStorage.setItem("role", result.data.role);
 
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("username", data.username);
-                localStorage.setItem("role", data.role);
-
-                //TODO: fix toasts
                 UIHelper.showMessage("Logged in successfully", "success");
-                window.location.href = "index.html";
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
             }
         }
         catch(err){
@@ -95,12 +96,11 @@ export class AccountService{
             //TODO: make function in UIHelper to show all message in result
         }
 
-        //TODO: refactor message to data (OperationResult)
         const userInfo = {
-            username: result.message.username,
-            email: result.message.email,
-            balance: result.message.balance,
-            regDate: result.message.registrationDate
+            username: result.data.username,
+            email: result.data.email,
+            balance: result.data.balance,
+            regDate: result.data.registrationDate
         }
 
         return userInfo;

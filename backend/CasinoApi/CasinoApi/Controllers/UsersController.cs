@@ -47,8 +47,13 @@ namespace CasinoApi.Controllers
 
             var token = _jwtService.GenerateToken(user);
 
-            //TODO: return operationResultDto
-            return Ok(new { token, user.Username, user.Role });
+            var data = new LoginResponseDto
+            {
+                Token = token,
+                Username = user.Username,
+                Role = user.Role
+            };
+            return Ok(OperationResult<LoginResponseDto>.Ok(data));
         }
 
         [Authorize]

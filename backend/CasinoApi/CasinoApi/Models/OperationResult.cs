@@ -17,7 +17,7 @@
 
     public class OperationResult<T> : OperationResult
     {
-        public T Message { get; set; }
+        public T Data { get; set; }
         public static OperationResult<T> Fail(string error)
             => new() { Success = false, Errors = new() { error } };
 
@@ -25,6 +25,6 @@
             => new() { Success = false, Errors = errors };
 
         public static OperationResult<T> Ok(T data) 
-            => new() { Message = data };
+            => new() { Data = data };
     }
 }

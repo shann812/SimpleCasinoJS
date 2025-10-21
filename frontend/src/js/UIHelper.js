@@ -19,4 +19,8 @@ export class UIHelper{
         });
         window.dispatchEvent(event);
     }
+
+    static showErrors(){
+        
+    }
 }

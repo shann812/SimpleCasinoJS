@@ -34,7 +34,7 @@ export class BalanceService{
         }
 
         //TODO: fix it should be data not message
-        return Number(result.message);
+        return Number(result.data);
     }
 
     async changeBalance(amount){
