@@ -2,7 +2,6 @@
 using CasinoApi.Dto;
 using CasinoApi.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace CasinoApi.Services
 {
@@ -87,14 +86,14 @@ namespace CasinoApi.Services
         public async Task<User?> GetUserByEmailAsync(string email) 
             => await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-        public async Task<User?> GetUserById(Guid userId) 
+        public async Task<User?> GetUserByIdAsync(Guid userId) 
             => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
         public async Task<OperationResult<UserInfoDto>> GetUserInfoAsync(Guid userId)
         {
             try
             {
-                var user = await GetUserById(userId);
+                var user = await GetUserByIdAsync(userId);
                 if(user == null)
                 {
                     //log

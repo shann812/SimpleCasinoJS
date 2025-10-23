@@ -45,6 +45,7 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddScoped<BalanceService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<BetService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 

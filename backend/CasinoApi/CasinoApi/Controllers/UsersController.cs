@@ -58,7 +58,7 @@ namespace CasinoApi.Controllers
 
         [Authorize]
         [HttpGet("me")]
-        public async Task<IActionResult> GetCurrentUserInfo()
+        public async Task<IActionResult> GetCurrentUserInfoAsync()
         {
             var userId = _userContextService.GetCurrentUserId();
             var getUserInfoResult = await _userService.GetUserInfoAsync(userId);

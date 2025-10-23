@@ -13,18 +13,21 @@ namespace CasinoApi.Services
             _userService = userService;
         }
 
-        public async Task<OperationResult<decimal>> GetUserBalance(Guid userId)
+        public async Task<decimal?> GetUserBalanceAsync(Guid userId)
         {
-            var user = await _userService.GetUserById(userId);
+            var user = await _userService.GetUserByIdAsync(userId);
             if (user == null)
-                return OperationResult<decimal>.Fail("User not found");
+            {
+                //log
+                return null;
+            } 
 
-            return OperationResult<decimal>.Ok(user.Balance);
+            return user.Balance;
         }
 
-        public async Task<OperationResult> ChangeUserBalance(Guid userId, decimal amount)
+        public async Task<OperationResult> ChangeUserBalanceAsync(Guid userId, decimal amount)
         {
-            var user = await _userService.GetUserById(userId);
+            var user = await _userService.GetUserByIdAsync(userId);
             if (user == null)
                 return OperationResult.Fail("User not found");
 

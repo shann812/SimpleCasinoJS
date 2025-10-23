@@ -1,5 +1,6 @@
 ﻿using CasinoApi.Dto;
 using CasinoApi.Interfaces;
+using CasinoApi.Models;
 using CasinoApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,21 +27,22 @@ namespace CasinoApi.Controllers
         public async Task<IActionResult> GetBalanceAsync()
         {
             var userId = _userContextService.GetCurrentUserId();
-            var result = await _balanceService.GetUserBalance(userId);
+            var balance = await _balanceService.GetUserBalanceAsync(userId);
             
-            if(!result.Success)
-                return BadRequest(result);
+            if(balance == null)
+                return BadRequest(OperationResult<decimal>.Fail("User not found"));
 
-            return Ok(result);
+            return Ok(OperationResult<decimal?>.Ok(balance));
+            //TODO: why is here not op result
         }
 
         [HttpPost]
         [Authorize]
         [Route("api/balance/change")]
-        public async Task<IActionResult> ChangeUserBalance([FromBody] ChangeBalanceDto changeBalanceDto)
+        public async Task<IActionResult> ChangeUserBalanceAsync([FromBody] ChangeBalanceDto changeBalanceDto)
         {
             var userId = _userContextService.GetCurrentUserId();
-            var result = await _balanceService.ChangeUserBalance(userId, changeBalanceDto.Amount);
+            var result = await _balanceService.ChangeUserBalanceAsync(userId, changeBalanceDto.Amount);
 
             if (!result.Success)
                 return BadRequest(result);
