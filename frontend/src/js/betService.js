@@ -1,9 +1,10 @@
 import { UIHelper } from "./UIHelper.js";
+import { BalanceService } from "./balanceService.js";
 
 export class BetService{
 
-    static async recordBet(betDto){
-        const response = await fetch("https://localhost:7181/api/bets", {
+    static async placeBet(betDto){
+        const response = await fetch("https://localhost:7181/api/bets/place", {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token"),
@@ -18,6 +19,8 @@ export class BetService{
             return;
         }
         
+        //for balance update, i can return newBalance from server to update it and don`t call getBalance 2nd time
+        const _balanceService = new BalanceService();
     }
 }
 

@@ -11,7 +11,7 @@
   },
   {
     "ContainingType": "CasinoApi.Controllers.BalanceController",
-    "Method": "ChangeUserBalance",
+    "Method": "ChangeUserBalanceAsync",
     "RelativePath": "api/balance/change",
     "HttpMethod": "POST",
     "IsController": true,
@@ -20,6 +20,22 @@
       {
         "Name": "changeBalanceDto",
         "Type": "CasinoApi.Dto.ChangeBalanceDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CasinoApi.Controllers.BetsController",
+    "Method": "PlaceBetAsync",
+    "RelativePath": "api/bets/place",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "placeBetDto",
+        "Type": "CasinoApi.Dto.PlaceBetDto",
         "IsRequired": true
       }
     ],
@@ -43,7 +59,7 @@
   },
   {
     "ContainingType": "CasinoApi.Controllers.UsersController",
-    "Method": "GetCurrentUserInfo",
+    "Method": "GetCurrentUserInfoAsync",
     "RelativePath": "api/users/me",
     "HttpMethod": "GET",
     "IsController": true,

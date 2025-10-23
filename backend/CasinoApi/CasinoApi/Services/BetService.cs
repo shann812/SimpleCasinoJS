@@ -50,7 +50,6 @@ namespace CasinoApi.Services
                 //log
                 return OperationResult.Fail("Unexpected error occurred while placing your bet.");
             }
-
         }
 
         private async Task<OperationResult<Bet>> TryCreateBetFromDtoAsync(PlaceBetDto placeBetDto, Guid userId)
@@ -85,7 +84,6 @@ namespace CasinoApi.Services
                 BalanceAfter = (decimal)userBalance + placeBetDto.Winnings, //idk
                 Date = DateTime.UtcNow,
                 UserId = userId,
-                User = user
             };
             return OperationResult<Bet>.Ok(bet);
         }

@@ -2,6 +2,7 @@ import { Validator } from "../validator.js";
 import { BalanceService } from "../balanceService.js";
 import { UIHelper } from "../UIHelper.js";
 import { BetDto } from "../betDto.js";
+import { BetService } from "../betService.js";
 
 export class Coinflip{
     #balanceService
@@ -9,10 +10,8 @@ export class Coinflip{
     constructor(){
         this.coinflipSection = UIHelper.getElement("coinflipGame");
         this.coinflipBetInput = UIHelper.getElement("coinflipBet")
-        this.coinflipWinOrLoseEl = UIHelper.getElement("coinflipWinOrLoseLable");
+        this.coinflipWinOrLoseEl = UIHelper.getElement("coinflipWinOrLoseLabel");
         this.coinflipWonValueEl = UIHelper.getElement("wonValueCoinflip");
-
-        this.game = "coinflip";
         
         this.#balanceService = new BalanceService();
     }
@@ -35,14 +34,7 @@ export class Coinflip{
             const winnings = userBet;
             this.coinflipWonValueEl.textContent = winnings;
 
-            const bet = new BetDto({
-                isWin: true,
-                betPrice: userBet,
-                winnings: winnings,
-                game: this.game
-            });
-            await this.#balanceService.changeBalance(winnings);
-            // await BetService.addBet(true, userBet, winnings, "coinflip");
+            await this.#placeBet(true, userBet, winnings);
         }
         else{
             this.coinflipWinOrLoseEl.textContent = "You lose";
@@ -52,15 +44,19 @@ export class Coinflip{
             const winnings = -userBet;
             this.coinflipWonValueEl.textContent = winnings;
 
-            const bet = new BetDto({
-                isWin: false,
-                betPrice: userBet,
-                winnings: winnings,
-                game: this.game
-            });
-                
-            await this.#balanceService.changeBalance(winnings);
-            // await BetService.addBet(false, userBet, winnings, "coinflip");
+
+            await this.#placeBet(false, userBet, winnings);
         }
+    }
+
+    async #placeBet(isWin, userBet, winnings){
+        const bet = new BetDto({
+            isWin: isWin,
+            betPrice: userBet,
+            winnings: winnings,
+            game: "coinflip"
+        });
+
+        await BetService.placeBet(bet);
     }
 }
