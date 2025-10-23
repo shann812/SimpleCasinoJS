@@ -1,6 +1,8 @@
 import { Validator } from "../validator.js";
-import { BalanceService } from "../balanceService.js";
+import { BalanceService } from "../Services/balanceService.js";
 import { UIHelper } from "../UIHelper.js";
+import { BetService } from "../Services/betService.js";
+import { BetDto } from "../betDto.js";
 
 export class GuessNumber{
     #balanceService
@@ -32,15 +34,30 @@ export class GuessNumber{
             this.guessNumberWinOrLoseEl.textContent = "You win!";
             this.guessNumberWinOrLoseEl.classList.remove("lose");
             this.guessNumberWinOrLoseEl.classList.add("win");
-            this.guessNumberWonValueEl.textContent = userBet * 10;
-            await this.#balanceService.changeBalance(userBet * 10);
+
+            const winnings = userBet * 10;
+            this.guessNumberWonValueEl.textContent = winnings;
+            await this.#placeBet(true, userBet, winnings);
         }
         else{
             this.guessNumberWinOrLoseEl.textContent = "You lost. Correct number was " + randomNumber;
             this.guessNumberWinOrLoseEl.classList.remove("win");
             this.guessNumberWinOrLoseEl.classList.add("lose");
-            this.guessNumberWonValueEl.textContent = "-" + userBet;
-            await this.#balanceService.changeBalance(-userBet);
+
+            const winnings = -userBet;
+            this.guessNumberWonValueEl.textContent = winnings;
+            await this.#placeBet(false, userBet, winnings);
         }
+    }
+
+    async #placeBet(isWin, userBet, winnings){
+        const bet = new BetDto({
+            isWin: isWin,
+            betPrice: userBet,
+            winnings: winnings,
+            game: "guessNumber"
+        });
+    
+        await BetService.placeBet(bet);
     }
 }

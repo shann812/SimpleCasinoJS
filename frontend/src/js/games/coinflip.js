@@ -1,8 +1,8 @@
 import { Validator } from "../validator.js";
-import { BalanceService } from "../balanceService.js";
+import { BalanceService } from "../Services/balanceService.js";
 import { UIHelper } from "../UIHelper.js";
 import { BetDto } from "../betDto.js";
-import { BetService } from "../betService.js";
+import { BetService } from "../Services/betService.js";
 
 export class Coinflip{
     #balanceService

@@ -1,10 +1,10 @@
 import { Coinflip } from "./games/coinflip.js";
 import { GuessNumber } from "./games/guessNumber.js";
-import { BalanceService } from "./balanceService.js";
+import { BalanceService } from "./Services/balanceService.js";
 import { UIHelper } from "./UIHelper.js";
 import { Validator } from "./validator.js";
 import { ToastManager } from "./toastManager.js";
-import { AccountService } from "./AccountService.js";
+import { AccountService } from "./Services/accountService.js";
 ToastManager.init();
 
 const loginBtn = UIHelper.getElement("loginBtn");

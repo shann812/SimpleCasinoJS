@@ -1,6 +1,6 @@
 import { UIHelper } from "./UIHelper.js";
 import { ToastManager } from "./toastManager.js";
-import { AccountService } from "./AccountService.js";
+import { AccountService } from "./Services/accountService.js";
 ToastManager.init();
 
 const username = UIHelper.getElement("username");

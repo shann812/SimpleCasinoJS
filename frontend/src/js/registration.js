@@ -1,7 +1,7 @@
 import { UIHelper } from "./UIHelper.js";
 import { Validator } from "./validator.js";
 import { ToastManager } from "./toastManager.js";
-import { AccountService } from "./AccountService.js";
+
 ToastManager.init();
 
 const registrationForm = UIHelper.getElement("registrationForm");
