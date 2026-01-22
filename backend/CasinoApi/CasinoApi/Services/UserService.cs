@@ -117,8 +117,13 @@ namespace CasinoApi.Services
                     return OperationResult<UserProfileDto>.Fail(lastTenBets.Errors);
                 }
 
-                return OperationResult<UserProfileDto>.Ok(userInfo);
+                return OperationResult<UserProfileDto>.Ok(new UserProfileDto
+                {
+                    UserInfo = userInfo,
+                    LastTenBets = lastTenBets.Data
+                });
             }
+
             catch(Exception ex)
             {
                 //log

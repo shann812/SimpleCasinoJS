@@ -1,5 +1,4 @@
 ﻿using CasinoApi.Enums;
-using CasinoApi.Models;
 
 namespace CasinoApi.Dto
 {

@@ -88,11 +88,14 @@ export class AccountService{
             window.location.href = "index.html";
         }
 
+        const userInfoResult = result.data.userInfo;
         const userInfo = {
-            username: result.data.username,
-            email: result.data.email,
-            balance: result.data.balance,
-            regDate: UIHelper.formatDate(result.data.registrationDate)
+            username: userInfoResult.username,
+            email: userInfoResult.email,
+            balance: userInfoResult.balance,
+            regDate: UIHelper.formatDate(userInfoResult.registrationDate),
+
+            lastTenBets: result.data.lastTenBets
         }
 
         return userInfo;

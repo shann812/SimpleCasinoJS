@@ -24,6 +24,25 @@ async function loadUserInfo(){
 
     //TODO: fix the date output
     regDate.textContent = userInfo.regDate;
+
+    loadUserBets(userInfo.lastTenBets);
 }
 
-//TODO: add bet history
+function loadUserBets(lastTenBets){
+    lastTenBets.array.forEach(bet => {
+        addBetCard(bet.isWin, bet.winnings, bet.gameName, bet.balanceAfter, bet.date);
+    });
+}
+
+function addBetCard(isWin, winnings, gameName, balanceAfter, date){
+    const card = document.createElement('div');
+    card.className = `bet-card ${isWin ? 'win' : 'lose'}`;
+    card.innerHTML = `
+        <p class="game-name">${gameName}</p>
+        <p class="winnings">Your winnings: ${winnings} $</p>
+        <p class="bet-date">Date: ${betDate}</p>
+        <p class="balance-after">Balance after: ${balanceAfterBet} $</p>
+    `;
+    document.getElementById('betHistory').appendChild(card);
+    card.style.animationDelay = '0.1s';
+}
