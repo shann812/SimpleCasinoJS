@@ -8,11 +8,9 @@ namespace CasinoApi.Services
     public class UserService
     {
         private readonly ApplicationDbContext _db;
-        private readonly BetService _betService;
-        public UserService(ApplicationDbContext db, BetService betService)
+        public UserService(ApplicationDbContext db)
         {
             _db = db;
-            _betService = betService;
         }
 
         public OperationResult ValidateRegistrationDto(RegistrationUserDto dto)
@@ -90,45 +88,5 @@ namespace CasinoApi.Services
 
         public async Task<User?> GetUserByIdAsync(Guid userId) 
             => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-        public async Task<OperationResult<UserProfileDto>> GetUserProfileAsync(Guid userId)
-        {
-            try
-            {
-                var user = await GetUserByIdAsync(userId);
-                if(user == null)
-                {
-                    //log
-                    return OperationResult<UserProfileDto>.Fail("Cannot find user");
-                }
-
-                var userInfo = new UserInfoDto
-                {
-                    Username = user.Username,
-                    Email = user.Email,
-                    Balance = user.Balance,
-                    RegistrationDate = user.RegistrationDate
-                };
-
-                var lastTenBets = await _betService.GetUserBetsAsync(userId, 0, 10);
-                if (!lastTenBets.Success)
-                {
-                    //log
-                    return OperationResult<UserProfileDto>.Fail(lastTenBets.Errors);
-                }
-
-                return OperationResult<UserProfileDto>.Ok(new UserProfileDto
-                {
-                    UserInfo = userInfo,
-                    LastTenBets = lastTenBets.Data
-                });
-            }
-
-            catch(Exception ex)
-            {
-                //log
-                return OperationResult<UserProfileDto>.Fail("Server error. Exception: " + ex);
-            }
-        }
     }
 }

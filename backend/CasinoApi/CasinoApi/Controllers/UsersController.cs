@@ -12,14 +12,17 @@ namespace CasinoApi.Controllers
     public class UsersController : Controller
     {
         private readonly UserService _userService;
+        private readonly UserProfileService _userProfileService;
         private readonly IUserContextService _userContextService;
 
-        public UsersController(UserService userService, IUserContextService userContextService)
+        public UsersController(UserService userService, UserProfileService userProfileService, IUserContextService userContextService)
         {
             _userService = userService;
+            _userProfileService = userProfileService;
             _userContextService = userContextService;
         }
 
+        //TODO: create AuthService and separate UserService
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegistrationUserDto dto)
         {
@@ -61,7 +64,7 @@ namespace CasinoApi.Controllers
         public async Task<IActionResult> GetCurrentUserInfoAsync()
         {
             var userId = _userContextService.GetCurrentUserId();
-            var getUserInfoResult = await _userService.GetUserProfileAsync(userId);
+            var getUserInfoResult = await _userProfileService.GetUserProfileAsync(userId);
             if(!getUserInfoResult.Success)
             {
                 //log
