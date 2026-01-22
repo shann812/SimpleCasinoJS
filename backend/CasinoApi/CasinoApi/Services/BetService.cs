@@ -3,6 +3,7 @@ using CasinoApi.Dto;
 using CasinoApi.Enums;
 using CasinoApi.Interfaces;
 using CasinoApi.Models;
+using System.Data.Entity;
 
 namespace CasinoApi.Services
 {
@@ -86,6 +87,34 @@ namespace CasinoApi.Services
                 UserId = userId,
             };
             return OperationResult<Bet>.Ok(bet);
+        }
+
+        public async Task<OperationResult<List<BetDto>>> GetUserBetsAsync(Guid userId, int skip, int take)
+        {
+            try
+            {
+                var userBets = await _db.Bets
+                    .Where(bet => bet.UserId == userId)
+                    .OrderByDescending(bet => bet.Date)
+                    .Skip(skip)
+                    .Take(take)
+                    .Select(bet => new BetDto
+                    {
+                        IsWin = bet.IsWin,
+                        WinningsMoney = bet.WinningsMoney,
+                        Game = bet.Game,
+                        BalanceAfter = bet.BalanceAfter,
+                        Date = bet.Date
+                    })
+                    .ToListAsync();
+
+                return OperationResult<List<BetDto>>.Ok(userBets);
+            }
+            catch(Exception ex)
+            {
+                //log
+                return OperationResult<List<BetDto>>.Fail("Unexpected error occurred while getting your bets.");
+            }
         }
     }
 }

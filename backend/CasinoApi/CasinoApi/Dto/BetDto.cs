@@ -1,8 +1,9 @@
 ﻿using CasinoApi.Enums;
+using CasinoApi.Models;
 
 namespace CasinoApi.Dto
 {
-    public class BetInfoDto
+    public class BetDto
     {
         public bool IsWin { get; set; }
         public decimal WinningsMoney { get; set; }

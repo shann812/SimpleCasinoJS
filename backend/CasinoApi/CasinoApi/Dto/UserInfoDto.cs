@@ -1,4 +1,6 @@
-﻿namespace CasinoApi.Dto
+﻿using CasinoApi.Models;
+
+namespace CasinoApi.Dto
 {
     public class UserInfoDto
     {
@@ -6,7 +8,5 @@
         public string Email { get; set; }
         public decimal Balance { get; set; }
         public DateTime RegistrationDate { get; set; }
-
-        //add LastTenBets list
     }
 }

@@ -8,9 +8,11 @@ namespace CasinoApi.Services
     public class UserService
     {
         private readonly ApplicationDbContext _db;
-        public UserService(ApplicationDbContext db)
+        private readonly BetService _betService;
+        public UserService(ApplicationDbContext db, BetService betService)
         {
             _db = db;
+            _betService = betService;
         }
 
         public OperationResult ValidateRegistrationDto(RegistrationUserDto dto)
@@ -89,7 +91,7 @@ namespace CasinoApi.Services
         public async Task<User?> GetUserByIdAsync(Guid userId) 
             => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
-        public async Task<OperationResult<UserInfoDto>> GetUserInfoAsync(Guid userId)
+        public async Task<OperationResult<UserProfileDto>> GetUserProfileAsync(Guid userId)
         {
             try
             {
@@ -97,7 +99,7 @@ namespace CasinoApi.Services
                 if(user == null)
                 {
                     //log
-                    return OperationResult<UserInfoDto>.Fail("Cannot find user");
+                    return OperationResult<UserProfileDto>.Fail("Cannot find user");
                 }
 
                 var userInfo = new UserInfoDto
@@ -108,12 +110,19 @@ namespace CasinoApi.Services
                     RegistrationDate = user.RegistrationDate
                 };
 
-                return OperationResult<UserInfoDto>.Ok(userInfo);
+                var lastTenBets = await _betService.GetUserBetsAsync(userId, 0, 10);
+                if (!lastTenBets.Success)
+                {
+                    //log
+                    return OperationResult<UserProfileDto>.Fail(lastTenBets.Errors);
+                }
+
+                return OperationResult<UserProfileDto>.Ok(userInfo);
             }
             catch(Exception ex)
             {
                 //log
-                return OperationResult<UserInfoDto>.Fail("Server error. Exception: " + ex);
+                return OperationResult<UserProfileDto>.Fail("Server error. Exception: " + ex);
             }
         }
     }

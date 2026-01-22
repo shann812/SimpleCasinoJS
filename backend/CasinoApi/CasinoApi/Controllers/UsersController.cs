@@ -61,7 +61,7 @@ namespace CasinoApi.Controllers
         public async Task<IActionResult> GetCurrentUserInfoAsync()
         {
             var userId = _userContextService.GetCurrentUserId();
-            var getUserInfoResult = await _userService.GetUserInfoAsync(userId);
+            var getUserInfoResult = await _userService.GetUserProfileAsync(userId);
             if(!getUserInfoResult.Success)
             {
                 //log
