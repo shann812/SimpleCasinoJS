@@ -20,6 +20,7 @@ export class UIHelper{
         window.dispatchEvent(event);
     }
 
+    //TODO: ?? showErrorsFromResult mb
     static showErrors(badResult){
         if (Array.isArray(badResult.errors)) {
             badResult.errors.forEach(err => UIHelper.showMessage(err, "error"));

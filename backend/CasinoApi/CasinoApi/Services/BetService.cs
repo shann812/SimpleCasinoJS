@@ -3,7 +3,7 @@ using CasinoApi.Dto;
 using CasinoApi.Enums;
 using CasinoApi.Interfaces;
 using CasinoApi.Models;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CasinoApi.Services
 {
@@ -91,6 +91,9 @@ namespace CasinoApi.Services
 
         public async Task<OperationResult<List<BetDto>>> GetUserBetsAsync(Guid userId, int skip, int take)
         {
+            if(take > 100) 
+                take = 100; //max 100 records for one request
+
             try
             {
                 var userBets = await _db.Bets
@@ -102,7 +105,7 @@ namespace CasinoApi.Services
                     {
                         IsWin = bet.IsWin,
                         WinningsMoney = bet.WinningsMoney,
-                        Game = bet.Game,
+                        Game = bet.Game.ToString(),
                         BalanceAfter = bet.BalanceAfter,
                         Date = bet.Date
                     })

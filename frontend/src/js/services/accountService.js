@@ -83,19 +83,17 @@ export class AccountService{
 
         const result = await response.json();
         if(!response.ok || !result.success){
-            localStorage.setItem("toastMessage", "Unable to load profile info");
+            localStorage.setItem("toastMessage", result.error);
             localStorage.setItem("toastType", "error");
             window.location.href = "index.html";
         }
 
-        const userInfoResult = result.data.userInfo;
+        const userInfoResult = result.data;
         const userInfo = {
             username: userInfoResult.username,
             email: userInfoResult.email,
             balance: userInfoResult.balance,
             regDate: UIHelper.formatDate(userInfoResult.registrationDate),
-
-            lastTenBets: result.data.lastTenBets
         }
 
         return userInfo;

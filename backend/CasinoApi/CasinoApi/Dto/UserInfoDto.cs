@@ -1,6 +1,4 @@
-﻿using CasinoApi.Models;
-
-namespace CasinoApi.Dto
+﻿namespace CasinoApi.Dto
 {
     public class UserInfoDto
     {

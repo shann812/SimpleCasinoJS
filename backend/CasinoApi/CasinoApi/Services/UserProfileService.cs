@@ -14,7 +14,7 @@ namespace CasinoApi.Services
             _userService = userService;
         }
 
-        public async Task<OperationResult<UserProfileDto>> GetUserProfileAsync(Guid userId)
+        public async Task<OperationResult<UserInfoDto>> GetUserProfileInfoAsync(Guid userId)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace CasinoApi.Services
                 if (user == null)
                 {
                     //log
-                    return OperationResult<UserProfileDto>.Fail("Cannot find user");
+                    return OperationResult<UserInfoDto>.Fail("Cannot find user");
                 }
 
                 var userInfo = new UserInfoDto
@@ -33,24 +33,13 @@ namespace CasinoApi.Services
                     RegistrationDate = user.RegistrationDate
                 };
 
-                var lastTenBets = await _betService.GetUserBetsAsync(userId, 0, 10);
-                if (!lastTenBets.Success)
-                {
-                    //log
-                    return OperationResult<UserProfileDto>.Fail(lastTenBets.Errors);
-                }
-
-                return OperationResult<UserProfileDto>.Ok(new UserProfileDto
-                {
-                    UserInfo = userInfo,
-                    LastTenBets = lastTenBets.Data
-                });
+                return OperationResult<UserInfoDto>.Ok(userInfo);
             }
 
             catch (Exception ex)
             {
                 //log
-                return OperationResult<UserProfileDto>.Fail("Server error. Exception: " + ex);
+                return OperationResult<UserInfoDto>.Fail("Server error. Exception: " + ex);
             }
         }
     }
