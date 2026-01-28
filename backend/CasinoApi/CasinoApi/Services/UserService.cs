@@ -1,92 +1,46 @@
-﻿using CasinoApi.Data;
-using CasinoApi.Dto;
+﻿using CasinoApi.Dto;
+using CasinoApi.Interfaces;
 using CasinoApi.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace CasinoApi.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        private readonly ApplicationDbContext _db;
-        public UserService(ApplicationDbContext db)
+        private readonly IUserRepository _userRepository;
+        private readonly IValidator<RegistrationUserDto> _registrationValidator;
+        private readonly IUserFactory<RegistrationUserDto> _registrationUserFactory;
+
+        public UserService(IUserRepository userRepository, IValidator<RegistrationUserDto> registrationValidator, IUserFactory<RegistrationUserDto> registrationUserFactory)
         {
-            _db = db;
+            _userRepository = userRepository;
+            _registrationValidator = registrationValidator;
+            _registrationUserFactory = registrationUserFactory;
         }
 
-        public OperationResult ValidateRegistrationDto(RegistrationUserDto dto)
+        public async Task<OperationResult> RegisterAsync(RegistrationUserDto dto)
         {
-            var result = new OperationResult();
-
-            if (string.IsNullOrWhiteSpace(dto.Username) || dto.Username.Length < 4 || dto.Username.Length > 20)
-            {
-                result.Success = false;
-                result.Errors.Add("Username must be 4-20 characters long.");
-            }
-
-            if (string.IsNullOrWhiteSpace(dto.Password) || dto.Password.Length < 6)
-            {
-                result.Success = false;
-                result.Errors.Add("Password must be at least 6 characters long.");
-            }
-
-            if (_db.Users.Any(u => u.Email == dto.Email))
-            {
-                result.Success = false;
-                result.Errors.Add("This email is already taken.");
-            }
-
-            if (dto.Password != dto.PasswordRepeat)
-            {
-                result.Success = false;
-                result.Errors.Add("Passwords do not match.");
-            }
-
-            return result;
-        }
-
-        public User CreateUserFromRegistrationDto(RegistrationUserDto dto)
-        {
-            if (dto == null)
-                throw new ArgumentNullException(nameof(dto));
-
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Username = dto.Username,
-                RegistrationDate = DateTime.UtcNow,
-                Verificated = false,
-                Role = Enums.RoleTypes.User,
-                Balance = 0
-            };
-
-            return user;
-        }
-
-        public async Task<OperationResult> SaveUserAsync(User user)
-        {
-            var result = new OperationResult();
-
             try
             {
-                _db.Users.Add(user);
-                await _db.SaveChangesAsync();
-                result.Success = true;
+                var validationResult = await _registrationValidator.ValidateAsync(dto);
+                if (!validationResult.Success)
+                    return validationResult;
+
+                var user = _registrationUserFactory.Create(dto);
+                await _userRepository.AddAsync(user);
             }
             catch (Exception ex)
             {
-                result = OperationResult.Fail("An error occurred while saving the user.");
+                return OperationResult.Fail("An error occurred while saving the user.");
                 // Log the exception (ex) if needed
             }
 
-            return result;
+            return new OperationResult(); //Success = true by default
         }
 
-        public async Task<User?> GetUserByEmailAsync(string email) 
-            => await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+        public async Task<User?> GetByEmailAsync(string email) 
+            => await _userRepository.GetByEmailAsync(email);
 
-        public async Task<User?> GetUserByIdAsync(Guid userId) 
-            => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        public async Task<User?> GetByIdAsync(Guid userId) 
+            => await _userRepository.GetByIdAsync(userId);
     }
 }

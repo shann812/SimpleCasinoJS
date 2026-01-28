@@ -11,40 +11,32 @@ namespace CasinoApi.Controllers
     [Route("api/users")]
     public class UsersController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly UserProfileService _userProfileService;
         private readonly IUserContextService _userContextService;
 
-        public UsersController(UserService userService, UserProfileService userProfileService, IUserContextService userContextService)
+        public UsersController(IUserService userService, UserProfileService userProfileService, IUserContextService userContextService)
         {
             _userService = userService;
             _userProfileService = userProfileService;
             _userContextService = userContextService;
         }
 
-        //TODO: create AuthService and separate UserService
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegistrationUserDto dto)
         {
-            var validationResult = _userService.ValidateRegistrationDto(dto);
-            if (!validationResult.Success)
-                return BadRequest(validationResult);
-
-            var user = _userService.CreateUserFromRegistrationDto(dto);
-            var saveUserResult = await _userService.SaveUserAsync(user);
-            if (!saveUserResult.Success)
-                return BadRequest(saveUserResult);
-
-            return Ok(OperationResult<string>.Ok("Accout created successfully"));
+            var result = await _userService.RegisterAsync(dto);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
+        //TODO: create AuthService
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(LoginUserDto dto, [FromServices] JwtService _jwtService)
         {
             if(dto == null)
                 return BadRequest(OperationResult.Fail("Error with dto"));
 
-            var user = await _userService.GetUserByEmailAsync(dto.Email);
+            var user = await _userService.GetByEmailAsync(dto.Email);
             if(user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return Unauthorized(OperationResult.Fail("Invalid email or password"));
 

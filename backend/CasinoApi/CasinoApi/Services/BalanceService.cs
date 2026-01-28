@@ -1,4 +1,5 @@
 ﻿using CasinoApi.Data;
+using CasinoApi.Interfaces;
 using CasinoApi.Models;
 
 namespace CasinoApi.Services
@@ -6,8 +7,8 @@ namespace CasinoApi.Services
     public class BalanceService
     {
         private readonly ApplicationDbContext _db;
-        private readonly UserService _userService;
-        public BalanceService(ApplicationDbContext db, UserService userService) 
+        private readonly IUserService _userService;
+        public BalanceService(ApplicationDbContext db, IUserService userService) 
         { 
             _db = db;
             _userService = userService;
@@ -15,7 +16,7 @@ namespace CasinoApi.Services
 
         public async Task<decimal?> GetUserBalanceAsync(Guid userId)
         {
-            var user = await _userService.GetUserByIdAsync(userId);
+            var user = await _userService.GetByIdAsync(userId);
             if (user == null)
             {
                 //log
@@ -27,7 +28,7 @@ namespace CasinoApi.Services
 
         public async Task<OperationResult> ChangeUserBalanceAsync(Guid userId, decimal amount)
         {
-            var user = await _userService.GetUserByIdAsync(userId);
+            var user = await _userService.GetByIdAsync(userId);
             if (user == null)
                 return OperationResult.Fail("User not found");
 

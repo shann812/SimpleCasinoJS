@@ -1,6 +1,7 @@
 import { UIHelper } from "./UIHelper.js";
 import { Validator } from "./validator.js";
 import { ToastManager } from "./toastManager.js";
+import { AccountService } from "./Services/accountService.js";
 
 ToastManager.init();
 

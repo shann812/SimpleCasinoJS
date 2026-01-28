@@ -1,16 +1,15 @@
 ﻿using CasinoApi.Dto;
+using CasinoApi.Interfaces;
 using CasinoApi.Models;
 
 namespace CasinoApi.Services
 {
     public class UserProfileService
     {
-        private readonly BetService _betService;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UserProfileService(BetService betService, UserService userService)
+        public UserProfileService(IUserService userService)
         {
-            _betService = betService;
             _userService = userService;
         }
 
@@ -18,7 +17,7 @@ namespace CasinoApi.Services
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(userId);
+                var user = await _userService.GetByIdAsync(userId);
                 if (user == null)
                 {
                     //log

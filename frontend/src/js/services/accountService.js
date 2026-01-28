@@ -27,8 +27,8 @@ export class AccountService{
             }, 1000);
         }
         catch(ex){
-            UIHelper.showMessage("Network error", "error");
-            console.error(err);     
+            UIHelper.showMessage(ex, "error");
+            console.error(ex);     
         }
     }
 
@@ -54,9 +54,9 @@ export class AccountService{
                 }, 1000);
             }
         }
-        catch(err){
+        catch(ex){
             UIHelper.showMessage("Network error", "error");
-            console.error(err);
+            console.error(ex);
         }
     }
 

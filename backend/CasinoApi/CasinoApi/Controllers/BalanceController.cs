@@ -12,13 +12,11 @@ namespace CasinoApi.Controllers
     {
         private readonly BalanceService _balanceService;
         private readonly IUserContextService _userContextService;
-        private readonly UserService _userService;
 
-        public BalanceController(BalanceService balanceService, IUserContextService userContextService, UserService userService)
+        public BalanceController(BalanceService balanceService, IUserContextService userContextService)
         {
             _balanceService = balanceService;
             _userContextService = userContextService;
-            _userService = userService;
         }
 
         [HttpGet]
@@ -33,7 +31,6 @@ namespace CasinoApi.Controllers
                 return BadRequest(OperationResult<decimal>.Fail("User not found"));
 
             return Ok(OperationResult<decimal?>.Ok(balance));
-            //TODO: why is here not op result
         }
 
         [HttpPost]

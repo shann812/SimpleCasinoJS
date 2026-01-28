@@ -51,6 +51,7 @@ async function loadUserInfo(){
     regDate.textContent = userInfo.regDate;
 }
 
+//TODO: label 'empty' if there are no bets
 async function loadUserBets(skip, take){
     const bets = await BetService.getUserBets(skip, take);
 

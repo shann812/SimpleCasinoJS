@@ -10,11 +10,11 @@ namespace CasinoApi.Services
     public class BetService
     {
         private readonly ApplicationDbContext _db;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly BalanceService _balanceService;
         private readonly IUserContextService _userContextService;
 
-        public BetService(ApplicationDbContext db, UserService userService, BalanceService balanceService, 
+        public BetService(ApplicationDbContext db, IUserService userService, BalanceService balanceService, 
             IUserContextService userContextService)
         {
             _db = db;
@@ -61,7 +61,7 @@ namespace CasinoApi.Services
                 return OperationResult<Bet>.Fail($"Invalid game type: '{placeBetDto.Game}'.");
             }
 
-            var user = await _userService.GetUserByIdAsync(userId);
+            var user = await _userService.GetByIdAsync(userId);
             if (user == null)
             {
                 //log
