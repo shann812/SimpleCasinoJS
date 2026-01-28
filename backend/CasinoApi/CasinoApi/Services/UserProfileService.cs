@@ -7,16 +7,19 @@ namespace CasinoApi.Services
     public class UserProfileService
     {
         private readonly IUserService _userService;
+        private readonly IUserContextService _userContextService;
 
-        public UserProfileService(IUserService userService)
+        public UserProfileService(IUserContextService userContextService, IUserService userService)
         {
             _userService = userService;
+            _userContextService = userContextService;
         }
 
-        public async Task<OperationResult<UserInfoDto>> GetUserProfileInfoAsync(Guid userId)
+        public async Task<OperationResult<UserInfoDto>> GetProfileInfoAsync()
         {
             try
             {
+                var userId = _userContextService.GetCurrentUserId();
                 var user = await _userService.GetByIdAsync(userId);
                 if (user == null)
                 {

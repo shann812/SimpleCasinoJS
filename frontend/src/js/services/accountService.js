@@ -34,7 +34,7 @@ export class AccountService{
 
     static async loginUser(userLogin){
         try{
-            const response = await fetch("https://localhost:7181/api/users/login", {
+            const response = await fetch("https://localhost:7181/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userLogin)

@@ -56,6 +56,7 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IValidator<RegistrationUserDto>, RegistrationValidator>();
 builder.Services.AddScoped<IUserFactory<RegistrationUserDto>, RegistrationUserFactory>();
 
