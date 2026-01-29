@@ -2,25 +2,25 @@
 using CasinoApi.Factories;
 using CasinoApi.Interfaces;
 using CasinoApi.Models;
-using CasinoApi.Repositories;
 
 namespace CasinoApi.Services
 {
     public class BetService
     {
-        private readonly IBetRepository _betRepository; //тут сделаю интерфейс
-        private readonly PlaceBetFactory _placeBetFactory;
+        private readonly IBetRepository _betRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserContextService _userContextService;
+        private readonly IUnitOfWork _uow;
 
-        public BetService(IBetRepository betRepository, 
-            PlaceBetFactory placeBetFactory, 
+        public BetService(
+            IBetRepository betRepository,
             IUserRepository userRepository, 
-            IUserContextService userContextService)
+            IUserContextService userContextService,
+            IUnitOfWork uow)
         {
             _betRepository = betRepository;
-            _placeBetFactory = placeBetFactory;
             _userRepository = userRepository;
+            _uow = uow;
             _userContextService = userContextService;
         }
 
@@ -33,11 +33,11 @@ namespace CasinoApi.Services
                 if(user is null)
                     return OperationResult.Fail("User is null");
 
-                var bet = _placeBetFactory.CreateFromDto(placeBetDto, user); //TODO: balance can be negative ?
+                var bet = PlaceBetFactory.CreateFromDto(placeBetDto, user); //TODO: balance can be negative ?
 
                 user.Balance += bet.WinningsMoney;
                 _betRepository.Add(bet);
-                await _userRepository.SaveChangesAsync();
+                await _uow.SaveChangesAsync();
                 return OperationResult.Ok();
             }
             catch(Exception ex)

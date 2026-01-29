@@ -4,9 +4,9 @@ using CasinoApi.Models;
 
 namespace CasinoApi.Factories
 {
-    public class PlaceBetFactory
+    public static class PlaceBetFactory
     {
-        public Bet CreateFromDto(PlaceBetDto dto, User user)
+        public static Bet CreateFromDto(PlaceBetDto dto, User user)
         {
             if (!Enum.TryParse<GameType>(dto.Game, true, out var gameType))
                 throw new Exception("Invalid game type");

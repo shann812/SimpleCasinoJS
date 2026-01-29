@@ -9,12 +9,17 @@ namespace CasinoApi.Services
         private readonly IUserRepository _userRepository;
         private readonly IValidator<RegistrationUserDto> _registrationValidator;
         private readonly IUserFactory<RegistrationUserDto> _registrationUserFactory;
+        private readonly IUnitOfWork _uow;
 
-        public UserService(IUserRepository userRepository, IValidator<RegistrationUserDto> registrationValidator, IUserFactory<RegistrationUserDto> registrationUserFactory)
+        public UserService(IUserRepository userRepository, 
+            IValidator<RegistrationUserDto> registrationValidator, 
+            IUserFactory<RegistrationUserDto> registrationUserFactory,
+            IUnitOfWork uow)
         {
             _userRepository = userRepository;
             _registrationValidator = registrationValidator;
             _registrationUserFactory = registrationUserFactory;
+            _uow = uow;
         }
 
         public async Task<OperationResult> RegisterAsync(RegistrationUserDto dto)
@@ -26,7 +31,8 @@ namespace CasinoApi.Services
                     return validationResult;
 
                 var user = _registrationUserFactory.Create(dto);
-                await _userRepository.AddAsync(user);
+                _userRepository.Add(user);
+                await _uow.SaveChangesAsync();
             }
             catch (Exception ex)
             {

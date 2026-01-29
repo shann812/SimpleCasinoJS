@@ -13,26 +13,11 @@ namespace CasinoApi.Repositories
             _db = db;
         }
 
-        public async Task AddAsync(User user)
-        {
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
-        }
+        public void Add(User user) 
+            => _db.Users.Add(user);
 
-        public async Task UpdateAsync(User user)
-        {
-            _db.Users.Update(user);
-            await _db.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(User user)
-        {
-            _db.Users.Remove(user);
-            await _db.SaveChangesAsync();
-        }
-
-        public async Task SaveChangesAsync()
-            => await _db.SaveChangesAsync();
+        public void Delete(User user)
+            => _db.Users.Remove(user);
 
         public async Task<User?> GetByIdAsync(Guid userId)
             => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);

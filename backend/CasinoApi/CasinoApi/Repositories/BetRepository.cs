@@ -14,9 +14,7 @@ namespace CasinoApi.Repositories
             _db = db;
         }
         public void Add(Bet bet)
-        {
-            _db.Bets.Add(bet);
-        }
+            => _db.Bets.Add(bet);
 
         //TODO: refactor skip/take
         public async Task<List<BetDto>> GetUserBets(Guid userId, int skip, int take)

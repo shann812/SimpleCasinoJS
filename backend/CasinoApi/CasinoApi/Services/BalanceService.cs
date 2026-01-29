@@ -1,5 +1,6 @@
 ﻿using CasinoApi.Interfaces;
 using CasinoApi.Models;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace CasinoApi.Services
 {
@@ -7,9 +8,11 @@ namespace CasinoApi.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserContextService _userContextService;
-        public BalanceService(IUserRepository userRepository, IUserContextService userContextService) 
+        private readonly IUnitOfWork _uow;
+        public BalanceService(IUserRepository userRepository, IUserContextService userContextService, IUnitOfWork uow) 
         {
             _userRepository = userRepository;            _userContextService = userContextService;
+            _uow = uow;
         }
 
         public async Task<decimal?> GetUserBalanceAsync()
@@ -33,7 +36,7 @@ namespace CasinoApi.Services
                 return OperationResult.Fail("User not found");
 
             user.Balance += amount;
-            await _userRepository.UpdateAsync(user);
+            await _uow.SaveChangesAsync();
 
             return OperationResult.Ok();
         }

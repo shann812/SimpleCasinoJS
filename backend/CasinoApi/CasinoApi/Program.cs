@@ -52,7 +52,6 @@ builder.Services.AddScoped<BetService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<UserProfileService>();
 builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<PlaceBetFactory>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -61,6 +60,7 @@ builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IValidator<RegistrationUserDto>, RegistrationValidator>();
 builder.Services.AddScoped<IUserFactory<RegistrationUserDto>, RegistrationUserFactory>();
+builder.Services.AddScoped<IUnitOfWork, EFUnitOfWork>();
 
 var app = builder.Build();
 
