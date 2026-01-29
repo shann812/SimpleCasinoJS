@@ -1,22 +1,21 @@
-﻿using CasinoApi.Data;
-using CasinoApi.Interfaces;
+﻿using CasinoApi.Interfaces;
 using CasinoApi.Models;
 
 namespace CasinoApi.Services
 {
     public class BalanceService
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IUserService _userService;
-        public BalanceService(ApplicationDbContext db, IUserService userService) 
-        { 
-            _db = db;
-            _userService = userService;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserContextService _userContextService;
+        public BalanceService(IUserRepository userRepository, IUserContextService userContextService) 
+        {
+            _userRepository = userRepository;            _userContextService = userContextService;
         }
 
-        public async Task<decimal?> GetUserBalanceAsync(Guid userId)
+        public async Task<decimal?> GetUserBalanceAsync()
         {
-            var user = await _userService.GetByIdAsync(userId);
+            var userId = _userContextService.GetCurrentUserId();
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
             {
                 //log
@@ -26,15 +25,15 @@ namespace CasinoApi.Services
             return user.Balance;
         }
 
-        public async Task<OperationResult> ChangeUserBalanceAsync(Guid userId, decimal amount)
+        public async Task<OperationResult> ChangeUserBalanceAsync(decimal amount)
         {
-            var user = await _userService.GetByIdAsync(userId);
+            var userId = _userContextService.GetCurrentUserId();
+            var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
                 return OperationResult.Fail("User not found");
 
             user.Balance += amount;
-            _db.Users.Update(user);
-            await _db.SaveChangesAsync();
+            await _userRepository.UpdateAsync(user);
 
             return OperationResult.Ok();
         }

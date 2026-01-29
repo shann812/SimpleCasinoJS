@@ -1,5 +1,4 @@
 ﻿using CasinoApi.Dto;
-using CasinoApi.Interfaces;
 using CasinoApi.Models;
 using CasinoApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -11,12 +10,10 @@ namespace CasinoApi.Controllers
     public class BalanceController : Controller
     {
         private readonly BalanceService _balanceService;
-        private readonly IUserContextService _userContextService;
 
-        public BalanceController(BalanceService balanceService, IUserContextService userContextService)
+        public BalanceController(BalanceService balanceService)
         {
             _balanceService = balanceService;
-            _userContextService = userContextService;
         }
 
         [HttpGet]
@@ -24,8 +21,7 @@ namespace CasinoApi.Controllers
         [Route("api/balance")]
         public async Task<IActionResult> GetBalanceAsync()
         {
-            var userId = _userContextService.GetCurrentUserId();
-            var balance = await _balanceService.GetUserBalanceAsync(userId);
+            var balance = await _balanceService.GetUserBalanceAsync();
             
             if(balance == null)
                 return BadRequest(OperationResult<decimal>.Fail("User not found"));
@@ -38,8 +34,7 @@ namespace CasinoApi.Controllers
         [Route("api/balance/change")]
         public async Task<IActionResult> ChangeUserBalanceAsync([FromBody] ChangeBalanceDto changeBalanceDto)
         {
-            var userId = _userContextService.GetCurrentUserId();
-            var result = await _balanceService.ChangeUserBalanceAsync(userId, changeBalanceDto.Amount);
+            var result = await _balanceService.ChangeUserBalanceAsync(changeBalanceDto.Amount);
 
             if (!result.Success)
                 return BadRequest(result);

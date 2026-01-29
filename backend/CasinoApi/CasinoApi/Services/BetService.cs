@@ -35,7 +35,7 @@ namespace CasinoApi.Services
                 _db.Bets.Add(createBetResult.Data);
                 await _db.SaveChangesAsync();
 
-                var changeUserBalanceResult = await _balanceService.ChangeUserBalanceAsync(userId, createBetResult.Data.WinningsMoney);
+                var changeUserBalanceResult = await _balanceService.ChangeUserBalanceAsync(createBetResult.Data.WinningsMoney);
                 if (!changeUserBalanceResult.Success)
                 {
                     //log
@@ -68,7 +68,7 @@ namespace CasinoApi.Services
                 return OperationResult<Bet>.Fail($"User with ID '{userId}' not found. Cannot place bet.");
             }
 
-            var userBalance = await _balanceService.GetUserBalanceAsync(userId);
+            var userBalance = await _balanceService.GetUserBalanceAsync();
             if(userBalance == null)
             {
                 //log
