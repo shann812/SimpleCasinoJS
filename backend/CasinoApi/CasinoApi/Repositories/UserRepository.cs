@@ -31,6 +31,9 @@ namespace CasinoApi.Repositories
             await _db.SaveChangesAsync();
         }
 
+        public async Task SaveChangesAsync()
+            => await _db.SaveChangesAsync();
+
         public async Task<User?> GetByIdAsync(Guid userId)
             => await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
 

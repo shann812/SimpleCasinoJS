@@ -12,12 +12,10 @@ namespace CasinoApi.Controllers
     public class BetsController : Controller
     {
         private readonly BetService _betService;
-        private readonly IUserContextService _userContextService;
 
         public BetsController(BetService betService, IUserContextService userContextService)
         {
             _betService = betService;
-            _userContextService = userContextService;
         }
 
         [Authorize]
@@ -40,8 +38,8 @@ namespace CasinoApi.Controllers
             if (skip < 0 || take <= 0)
                 return BadRequest("Invalid pagination parameters");
 
-            var userId = _userContextService.GetCurrentUserId();
-            var result = await _betService.GetUserBetsAsync(userId, skip, take);
+            
+            var result = await _betService.GetUserBetsAsync(skip, take);
             if (!result.Success)
             {
                 //log

@@ -1,25 +1,26 @@
-﻿using CasinoApi.Data;
-using CasinoApi.Dto;
-using CasinoApi.Enums;
+﻿using CasinoApi.Dto;
+using CasinoApi.Factories;
 using CasinoApi.Interfaces;
 using CasinoApi.Models;
-using Microsoft.EntityFrameworkCore;
+using CasinoApi.Repositories;
 
 namespace CasinoApi.Services
 {
     public class BetService
     {
-        private readonly ApplicationDbContext _db;
-        private readonly IUserService _userService;
-        private readonly BalanceService _balanceService;
+        private readonly IBetRepository _betRepository; //тут сделаю интерфейс
+        private readonly PlaceBetFactory _placeBetFactory;
+        private readonly IUserRepository _userRepository;
         private readonly IUserContextService _userContextService;
 
-        public BetService(ApplicationDbContext db, IUserService userService, BalanceService balanceService, 
+        public BetService(IBetRepository betRepository, 
+            PlaceBetFactory placeBetFactory, 
+            IUserRepository userRepository, 
             IUserContextService userContextService)
         {
-            _db = db;
-            _userService = userService;
-            _balanceService = balanceService;
+            _betRepository = betRepository;
+            _placeBetFactory = placeBetFactory;
+            _userRepository = userRepository;
             _userContextService = userContextService;
         }
 
@@ -28,89 +29,33 @@ namespace CasinoApi.Services
             try
             {
                 var userId = _userContextService.GetCurrentUserId();
-                var createBetResult = await TryCreateBetFromDtoAsync(placeBetDto, userId);
-                if (!createBetResult.Success)
-                    return createBetResult;
+                var user = await _userRepository.GetByIdAsync(userId);
+                if(user is null)
+                    return OperationResult.Fail("User is null");
 
-                _db.Bets.Add(createBetResult.Data);
-                await _db.SaveChangesAsync();
+                var bet = _placeBetFactory.CreateFromDto(placeBetDto, user); //TODO: balance can be negative ?
 
-                var changeUserBalanceResult = await _balanceService.ChangeUserBalanceAsync(createBetResult.Data.WinningsMoney);
-                if (!changeUserBalanceResult.Success)
-                {
-                    //log
-                    _db.Bets.Remove(createBetResult.Data);
-                    await _db.SaveChangesAsync();
-                    return changeUserBalanceResult;
-                }
-
+                user.Balance += bet.WinningsMoney;
+                _betRepository.Add(bet);
+                await _userRepository.SaveChangesAsync();
                 return OperationResult.Ok();
             }
             catch(Exception ex)
             {
                 //log
-                return OperationResult.Fail("Unexpected error occurred while placing your bet.");
+                return OperationResult.Fail("Unexpected error occurred while placing your bet. Ex: " + ex);
             }
         }
 
-        private async Task<OperationResult<Bet>> TryCreateBetFromDtoAsync(PlaceBetDto placeBetDto, Guid userId)
-        {
-            if (!Enum.TryParse<GameType>(placeBetDto.Game, ignoreCase: true, out var gameType)) 
-            {
-                //log
-                return OperationResult<Bet>.Fail($"Invalid game type: '{placeBetDto.Game}'.");
-            }
-
-            var user = await _userService.GetByIdAsync(userId);
-            if (user == null)
-            {
-                //log
-                return OperationResult<Bet>.Fail($"User with ID '{userId}' not found. Cannot place bet.");
-            }
-
-            var userBalance = await _balanceService.GetUserBalanceAsync();
-            if(userBalance == null)
-            {
-                //log
-                return OperationResult<Bet>.Fail($"Failed to retrieve balance for user '{userId}'.");
-            }
-
-
-            var bet = new Bet()
-            {
-                IsWin = placeBetDto.IsWin,
-                Price = placeBetDto.BetPrice,
-                WinningsMoney = placeBetDto.Winnings,
-                Game = gameType,
-                BalanceAfter = (decimal)userBalance + placeBetDto.Winnings, //idk
-                Date = DateTime.UtcNow,
-                UserId = userId,
-            };
-            return OperationResult<Bet>.Ok(bet);
-        }
-
-        public async Task<OperationResult<List<BetDto>>> GetUserBetsAsync(Guid userId, int skip, int take)
+        public async Task<OperationResult<List<BetDto>>> GetUserBetsAsync(int skip, int take)
         {
             if(take > 100) 
                 take = 100; //max 100 records for one request
 
             try
             {
-                var userBets = await _db.Bets
-                    .Where(bet => bet.UserId == userId)
-                    .OrderByDescending(bet => bet.Date)
-                    .Skip(skip)
-                    .Take(take)
-                    .Select(bet => new BetDto
-                    {
-                        IsWin = bet.IsWin,
-                        WinningsMoney = bet.WinningsMoney,
-                        Game = bet.Game.ToString(),
-                        BalanceAfter = bet.BalanceAfter,
-                        Date = bet.Date
-                    })
-                    .ToListAsync();
-
+                var userId = _userContextService.GetCurrentUserId();
+                var userBets = await _betRepository.GetUserBets(userId, skip, take);
                 return OperationResult<List<BetDto>>.Ok(userBets);
             }
             catch(Exception ex)
